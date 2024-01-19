@@ -1,6 +1,7 @@
 package com.Hajuuu.page.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -9,18 +10,11 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 
 @Entity
+@DiscriminatorValue("B")
 @Getter
-public class Book {
+public class Book extends Post {
 
-    @Id @GeneratedValue
-    @Column(name = "book_id")
-    private Long id;
-
-    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY)
-    private Post post;
     private String title;
-
     private String author;
-
     private Long page;
 }
