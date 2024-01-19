@@ -20,11 +20,11 @@ public class PostRepository {
         }
     }
 
-    public Post findPost(Long id) {
+    public Post findOne(Long id) {
         return em.find(Post.class, id);
     }
 
-    public List<Post> findPost() {
+    public List<Post> findAll() {
         return em.createQuery("select i from Post i", Post.class).getResultList();
     }
 }
