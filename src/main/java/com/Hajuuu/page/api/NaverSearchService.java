@@ -1,6 +1,7 @@
 package com.Hajuuu.page.api;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ public class NaverSearchService {
     private static String apiURL = "https://openapi.naver.com/v1/search/book.json";
 
     public static NaverBookDTO getBookInfo(String title) throws IOException {
-        String encodedTitle = URLEncoder.encode(title, "UTF-8");
+        String encodedTitle = encodingTitle(title);
         WebClient client = webClient();
         Mono<NaverBookDTO> response = client.get()
                 .uri(uriBuilder -> uriBuilder
@@ -45,4 +46,13 @@ public class NaverSearchService {
                 .build();
     }
 
+    private static String encodingTitle(String title) {
+        String encodedText = null;
+        try {
+            encodedText = URLEncoder.encode(title, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패", e);
+        }
+        return encodedText;
+    }
 }
