@@ -1,12 +1,9 @@
 package com.Hajuuu.page.api;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -20,16 +17,8 @@ public class AladinSearchService {
     private static String TTBKey = "ttbhhjy17131732001";
     private static final String apiURL = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 
-    public static AladinBookDTO get(String isbn13) throws IOException {
-        DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(apiURL);
-        factory.setEncodingMode(EncodingMode.NONE);
-
-        WebClient client = WebClient.builder()
-                .uriBuilderFactory(factory)
-                .baseUrl(apiURL)
-                .build();
-
-
+    public static AladinBookDTO getBookInfo(String isbn13) throws IOException {
+        WebClient client = webClient();
         Mono<AladinBookDTO> response = client.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("ttbkey", URLEncoder.encode(TTBKey))
@@ -47,4 +36,13 @@ public class AladinSearchService {
         return aladinBookDTO;
     }
 
+    private static WebClient webClient() {
+        DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(apiURL);
+        factory.setEncodingMode(EncodingMode.NONE);
+
+        return WebClient.builder()
+                .uriBuilderFactory(factory)
+                .baseUrl(apiURL)
+                .build();
+    }
 }
