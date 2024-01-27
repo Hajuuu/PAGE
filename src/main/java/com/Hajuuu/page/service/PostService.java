@@ -1,5 +1,6 @@
 package com.Hajuuu.page.service;
 
+import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.Post;
 import com.Hajuuu.page.repository.PostRepository;
 import java.util.List;
@@ -18,6 +19,13 @@ public class PostService {
     public long savePost(Post post) {
         postRepository.save(post);
         return post.getId();
+    }
+
+    @Transactional
+    public void updatePost(Long id, String content, Book book) {
+        Post post = postRepository.findOne(id);
+        post.setBook(book);
+        post.setContent(content);
     }
 
     public Post findOne(Long postId) {
