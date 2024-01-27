@@ -15,14 +15,14 @@ public class SearchController {
 
     @GetMapping("/search/{title}")
     public NaverBookDTO getNaver(@PathVariable("title") String title, Model model) throws IOException {
-        NaverBookDTO naverBooks = NaverSearchService.get(title);
+        NaverBookDTO naverBooks = NaverSearchService.getBookInfo(title);
         model.addAttribute(naverBooks);
         return naverBooks;
     }
 
     @GetMapping("/searchDetail/{isbn13}")
     public AladinBookDTO getAladin(@PathVariable("isbn13") String isbn13, Model model) throws IOException {
-        AladinBookDTO aladinBookDTO = AladinSearchService.get(isbn13);
+        AladinBookDTO aladinBookDTO = AladinSearchService.getBookInfo(isbn13);
         return aladinBookDTO;
     }
 }
