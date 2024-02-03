@@ -14,16 +14,17 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 public class NaverSearchService {
-
-    private static final String clientId = "G7IrKRPfEKzpqYyM1df3";
-    private static final String clientSecret = "PqdCvNfbNl";
+    private static final String clientId = "";
+    private static final String clientSecret = "";
 
     private static String apiURL = "https://openapi.naver.com/v1/search/book.json";
 
-    public static NaverBookDTO getBookInfo(String title) throws IOException {
+    private static WebClient webClient;
+
+    public NaverBookDTO getBookInfo(String title) throws IOException {
         String encodedTitle = encodingTitle(title);
-        WebClient client = webClient();
-        Mono<NaverBookDTO> response = client.get()
+        webClient = createWebClient();
+        Mono<NaverBookDTO> response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("query", encodedTitle)
                         .queryParam("display", 5)
@@ -35,7 +36,7 @@ public class NaverSearchService {
         return naverBookDTO;
     }
 
-    private static WebClient webClient() {
+    private WebClient createWebClient() {
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(apiURL);
         factory.setEncodingMode(EncodingMode.NONE);
         return WebClient.builder()
@@ -46,8 +47,8 @@ public class NaverSearchService {
                 .build();
     }
 
-    private static String encodingTitle(String title) {
-        String encodedText = null;
+    private String encodingTitle(String title) {
+        String encodedText = "";
         try {
             encodedText = URLEncoder.encode(title, "UTF-8");
         } catch (UnsupportedEncodingException e) {
