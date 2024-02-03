@@ -8,14 +8,15 @@ import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class SearchController {
 
@@ -25,12 +26,25 @@ public class SearchController {
     private final PostService postService;
     private final BookService bookService;
 
-    @GetMapping("/search/{title}")
-    public NaverBookDTO getNaver(@PathVariable("title") String title, Model model) throws IOException {
-        NaverBookDTO naverBooks = naverSearchService.getBookInfo(title);
-        model.addAttribute(naverBooks);
-        return naverBooks;
+
+    @GetMapping("/search/searchMain")
+    public String searchTitle(Model model) throws IOException {
+        String title = "";
+        model.addAttribute("title", title);
+        return "/search/searchMain";
     }
+
+    @PostMapping("/search/searchMain")
+    public String search(@ModelAttribute("title") String title, Model model) throws IOException {
+        if (title == null || title.isBlank() || title.isEmpty()) {
+            return "search/searchMain";
+        }
+        NaverBookDTO bookInfo = naverSearchService.getBookInfo(title);
+        List<NaverBookInfo> items = bookInfo.getItems();
+        model.addAttribute("items", items);
+        return "search/searchMain";
+    }
+
 
     @PostMapping("search/{isbn}/select")
     public void selectBook(@PathVariable("isbn") String isbn, Model model) throws IOException {
@@ -52,16 +66,6 @@ public class SearchController {
         postService.savePost(post);
     }
 
-//    @PostMapping("/search/save")
-//    public void savePost() {
-//        String content = "sjaejgjwe;gjwelgjlwejglewjgalejwgljewlgjlegajelagjlejgwjegaewj";
-//
-//    }
-
-//    @PostMapping("search/save")
-//    public String saveBook() {
-//
-//    }
 
     @GetMapping("searchDetail/{isbn13}")
     public AladinBookDTO getAladin(@PathVariable("isbn13") String isbn13, Model model) throws IOException {
