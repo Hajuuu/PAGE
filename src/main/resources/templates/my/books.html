@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>제목</th>
+        <th>저자</th>
+        <th>페이지</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.page}"></td>
+    </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
