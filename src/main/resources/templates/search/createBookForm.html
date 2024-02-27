@@ -10,52 +10,59 @@
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
      data-sidebar-position="fixed" data-header-position="fixed">
     <div th:replace="fragments/sidebar :: sidebar"/>
+
     <!-- Search form -->
     <div class="body-wrapper">
-
+        <div th:replace="fragments/header :: header"/>
         <div class="container-fluid">
             <div class="container-fluid">
-                <h5 class="card-title fw-semibold mb-4">책 검색</h5>
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="button" value="책 제목을 입력하세요"
-                       onclick="location.href='/search/naverBook'">
+                <h5 class="card-title fw-semibold mb-4">검색해서 등록하기</h5>
+                <form th:action="@{/search/naverBook}" method="get">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="submit" value="검색하기">
+                </form>
+
             </div>
-            <div class="container-fluid">
-                <h5 class="card-title fw-semibold mb-4" style="margin-top: 40px">책 등록</h5>
-                <div class="card">
-                    <div class="card-body">
 
-                        <form th:action="@{/book/new}" th:object="${form}" method="post">
-                            <div class="row">
-                                <div class="col-md-4" id="card-img">
-                                    <img th:src="*{image}" id="image">
-                                </div>
+        </div>
 
+        <div class="container-fluid">
+            <h5 class="card-title fw-semibold mb-4">책 등록하기</h5>
+            <div class="card">
+                <div class="card-body">
 
-                                <div class="col-md-7">
-                                    <div class="mb-3">
-                                        <label th:for="title" class="form-label">책 제목</label>
-                                        <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="책 제목을 입력하세요">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label th:for="author" class="form-label">저자</label>
-                                        <input type="text" class="form-control" id="author" th:field="*{author}" placeholder="저자를 입력하세요">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label th:for="page" class="form-label">페이지</label>
-                                        <input type="number" class="form-control" id="page" th:field="*{page}" placeholder="페이지를 입력하세요">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="bookState" class="form-label">독서 상태</label>
-                                        <input type="text" th:field="*{bookState}" class="form-control" id="bookState" placeholder="상태를 입력하세요">
-                                    </div>
-                                </div>
+                    <form th:action="@{/book/new}" th:object="${books}" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img th:src="*{image}" id="image">
                             </div>
 
+                            <div class="col-md-7">
+                                <div class="mb-3">
+                                    <label th:for="title" class="form-label">책 제목</label>
+                                    <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="책 제목을 입력하세요">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="author" class="form-label">저자</label>
+                                    <input type="text" class="form-control" id="author" th:field="*{author}" placeholder="저자를 입력하세요">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="isbn" class="form-label">ISBN</label>
+                                    <input type="number" class="form-control" id="isbn" th:field="*{isbn}" placeholder="isbn을 입력하세요">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="page" class="form-label">페이지</label>
+                                    <input type="number" class="form-control" id="page" th:field="*{page}" placeholder="페이지를 입력하세요">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="bookState" class="form-label">독서 상태</label>
+                                    <input type="text" th:field="*{bookState}" class="form-control" id="bookState" placeholder="상태를 입력하세요">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
