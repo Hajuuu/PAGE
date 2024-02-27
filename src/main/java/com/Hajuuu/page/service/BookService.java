@@ -19,9 +19,17 @@ public class BookService {
     public long saveBook(SearchBookDTO searchBookDTO) {
         Book book = new Book();
         book.createBook(searchBookDTO.getTitle(), searchBookDTO.getAuthor(), searchBookDTO.getPage(),
-                searchBookDTO.getImage());
+                searchBookDTO.getImage(), searchBookDTO.getIsbn(), searchBookDTO.getBookState());
+        validateDuplicateBook(book);
         bookRepository.save(book);
         return book.getId();
+    }
+
+    private void validateDuplicateBook(Book book) {
+        List<Book> findBooks = bookRepository.findAllByTitle(book.getTitle());
+        if (!findBooks.isEmpty()) {
+            throw new IllegalStateException("이미 저장한 책이에요!");
+        }
     }
 
     public List<Book> findAll() {
@@ -31,5 +39,6 @@ public class BookService {
     public List<Book> findBooks(User user) {
         return bookRepository.findAllById(user.getId());
     }
+
 
 }
