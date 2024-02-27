@@ -1,27 +1,49 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
-
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../assets/css/styles.min.css"/>
 </head>
-<body>
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>제목</th>
-        <th>저자</th>
-        <th>페이지</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.page}"></td>
-    </tr>
 
-    </tbody>
-</table>
+<body>
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+
+    <div th:replace="fragments/sidebar :: sidebar"/>
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <div th:replace="fragments/header :: header"/>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <h5 class="card-title fw-semibold mb-4">내 서재</h5>
+                            <th:block th:each="book : ${books}">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <img th:src="${book.image}" class="card-img-top">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${book.title}"></h5>
+                                            <p class="card-text" th:text="${book.author}"></p>
+                                            <p class="card-text" th:text="${book.bookState}"></p>
+                                            <a href="#" class="btn btn-success m-1">기록하기</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/sidebarmenu.js"></script>
+<script src="../assets/js/app.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.js"></script>
 </body>
-</html>
