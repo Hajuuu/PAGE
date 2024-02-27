@@ -1,28 +1,97 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
+          href="../assets/css/styles.min.css"/>
+    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
 <body>
-<div class="container">
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>재고수량</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="book : ${naverBooks}">
-                <td th:text="${book.title}"></td>
-                <td th:text="${book.isbn}"></td>
-                <td th:text="${book.author}"></td>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <div th:replace="fragments/sidebar :: sidebar"/>
 
-            </tr>
-            </tbody>
-        </table>
+    <div class="body-wrapper">
+        <div th:replace="fragments/header :: header"/>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <h5 class="card-title fw-semibold mb-4">제목을 검색해주세요</h5>
+                <form th:action="@{/search/naverBook}" method="post">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" value="책 제목을 입력하세요" th:value="${title}"
+                           name="title">
+                </form>
+            </div>
+
+        </div>
+        <div class="container-fluid">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                        <tr>
+                            <th class="border-bottom-0">
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">제목</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">저자</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">출판사</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="book : ${items}">
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">1</h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-1" th:text="${book.title}" name="title"></h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <p class="mb-0 fw-normal" th:text="${book.author}" name="author"></p>
+                            </td>
+                            <td class="border-bottom-0">
+                                <p class="mb-0 fw-normal" th:text="${book.publisher}" name="publisher"></p>
+                            </td>
+                            <td class="border-bottom-0">
+                                <a th:href="'javascript:select('+${book.isbn}+')'"
+                                   class="btn btn-success">선택</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div> <!-- /container -->
+
+</div>
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/sidebarmenu.js"></script>
+<script src="../assets/js/app.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+<script>
+ function select(isbn) {
+ var form = document.createElement("form");
+ form.setAttribute("method", "post");
+ form.setAttribute("action", "/book/" + isbn + "/select");
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+
+</script>
+
 </body>
+
 </html>
