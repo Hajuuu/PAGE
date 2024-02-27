@@ -11,10 +11,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
 @Getter
+@AllArgsConstructor
 public class Book {
 
     @Id
@@ -29,16 +33,20 @@ public class Book {
     private String author;
     private Long page;
     private String image;
+    private String bookState;
+    private String isbn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void createBook(String title, String author, Long page, String image) {
+    public void createBook(String title, String author, Long page, String image, String isbn, String bookState) {
         this.title = title;
         this.author = author;
         this.page = page;
         this.image = image;
+        this.isbn = isbn;
+        this.bookState = bookState;
     }
 
 
