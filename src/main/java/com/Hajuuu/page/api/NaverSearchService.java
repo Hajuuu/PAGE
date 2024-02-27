@@ -1,6 +1,5 @@
 package com.Hajuuu.page.api;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +13,14 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 public class NaverSearchService {
-    private static final String clientId = "";
-    private static final String clientSecret = "";
+    private static final String clientId = "G7IrKRPfEKzpqYyM1df3";
+    private static final String clientSecret = "PqdCvNfbNl";
 
     private static String apiURL = "https://openapi.naver.com/v1/search/book.json";
 
     private static WebClient webClient;
 
-    public NaverBookDTO getBookInfo(String title) throws IOException {
+    public NaverBookDTO getBookInfo(String title) {
         String encodedTitle = encodingTitle(title);
         webClient = createWebClient();
         Mono<NaverBookDTO> response = webClient.get()
