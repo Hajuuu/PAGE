@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css?after}"
+          href="../assets/css/styles.min.css?after"/>
+    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <div th:replace="fragments/sidebar :: sidebar"/>
+
+    <!-- Search form -->
+    <div class="body-wrapper">
+        <div th:replace="fragments/header :: header"/>
+        <div class="container-fluid">
+            <h4>로그인 후 이용해주세요</h4>
+        </div>
+    </div>
+</div>
+</body>
+</html>
