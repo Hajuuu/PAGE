@@ -1,5 +1,6 @@
 package com.Hajuuu.page.domain;
 
+import com.Hajuuu.page.api.BookState;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,14 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Book {
 
     @Id
@@ -33,14 +32,15 @@ public class Book {
     private String author;
     private Long page;
     private String image;
-    private String bookState;
+    private BookState bookState;
     private String isbn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void createBook(String title, String author, Long page, String image, String isbn, String bookState) {
+
+    public void createBook(String title, String author, Long page, String image, String isbn, BookState bookState) {
         this.title = title;
         this.author = author;
         this.page = page;
