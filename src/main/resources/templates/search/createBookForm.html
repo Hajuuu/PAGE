@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
-          href="../assets/css/styles.min.css"/>
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css?after}"
+          href="../assets/css/styles.min.css?after"/>
     <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <h5 class="card-title fw-semibold mb-4">검색해서 등록하기</h5>
-                <form th:action="@{/search/naverBook}" method="get">
+                <form th:action="@{/search}" method="get">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="submit" value="검색하기">
                 </form>
@@ -55,8 +55,14 @@
                                     <input type="number" class="form-control" id="page" th:field="*{page}" placeholder="페이지를 입력하세요">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="bookState" class="form-label">독서 상태</label>
-                                    <input type="text" th:field="*{bookState}" class="form-control" id="bookState" placeholder="상태를 입력하세요">
+                                    <label th:for="bookState" class="form-label">독서 상태</label>
+                                    <select th:field="*{bookState}" class="form-control">
+                                        <option value="">독서 상태</option>
+                                        <option th:each="status : ${T(com.Hajuuu.page.api.BookState).values()}"
+                                                th:value="${status}"
+                                                th:text="${status}">option
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
