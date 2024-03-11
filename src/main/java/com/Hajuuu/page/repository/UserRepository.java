@@ -1,33 +1,38 @@
 package com.Hajuuu.page.repository;
 
+import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
-    public Long save(User user) {
+    public void save(User user) {
         em.persist(user);
-        return user.getId();
     }
 
     public User findOne(Long id) {
         return em.find(User.class, id);
     }
 
-    public List<User> findAll() {
-        return em.createQuery("select u from User u", User.class).getResultList();
+    public Optional<User> findByLoginId(String loginId) {
+        return findAll().stream()
+                .filter(u -> u.getLoginId().equals(loginId)).findFirst();
     }
 
-    public List<User> findByName(String name) {
-        return em.createQuery("select u from User u where u.name = :name", User.class)
-                .setParameter("name", name)
+    public List<User> findAll() {
+        return em.createQuery("select u from User u", User.class)
                 .getResultList();
+    }
+
+    public List<Book> findBooks(String loginId) {
+        return findByLoginId(loginId).get().getBooks();
     }
 }
