@@ -6,6 +6,7 @@ import com.Hajuuu.page.api.AladinSearchService;
 import com.Hajuuu.page.api.NaverBookInfo;
 import com.Hajuuu.page.api.NaverSearchService;
 import com.Hajuuu.page.api.SearchBookDTO;
+import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
@@ -41,7 +43,8 @@ public class BookController {
     }
 
     @PostMapping("/book/new")
-    public String addBook(@ModelAttribute("books") SearchBookDTO searchBookDTO,
+    public String addBook(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
+                          @ModelAttribute("books") SearchBookDTO searchBookDTO,
                           BindingResult bindingResult,
                           Model model) {
 
@@ -61,9 +64,10 @@ public class BookController {
             return "search/createBookForm";
         }
         searchBookDTO.setImage(image);
-        bookService.saveBook(searchBookDTO);
+        
+        bookService.saveBook(loginUser, searchBookDTO);
 
-        return "redirect:/my/books";
+        return "redirect:/users/books";
     }
 
     @PostMapping(value = "/book/{isbn}/select")
