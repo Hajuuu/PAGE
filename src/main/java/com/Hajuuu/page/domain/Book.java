@@ -40,7 +40,9 @@ public class Book {
     private User user;
 
 
-    public void createBook(String title, String author, Long page, String image, String isbn, BookState bookState) {
+    public void createBook(User user, String title, String author, Long page, String image, String isbn,
+                           BookState bookState) {
+        this.user = user;
         this.title = title;
         this.author = author;
         this.page = page;
