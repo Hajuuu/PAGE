@@ -1,6 +1,7 @@
 package com.Hajuuu.page.service;
 
 import com.Hajuuu.page.api.SearchBookDTO;
+import com.Hajuuu.page.controller.SessionConst;
 import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.repository.BookRepository;
@@ -8,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,9 +18,10 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Transactional
-    public long saveBook(SearchBookDTO searchBookDTO) {
+    public long saveBook(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
+                         SearchBookDTO searchBookDTO) {
         Book book = new Book();
-        book.createBook(searchBookDTO.getTitle(), searchBookDTO.getAuthor(), searchBookDTO.getPage(),
+        book.createBook(loginUser, searchBookDTO.getTitle(), searchBookDTO.getAuthor(), searchBookDTO.getPage(),
                 searchBookDTO.getImage(), searchBookDTO.getIsbn(), searchBookDTO.getBookState());
         validateDuplicateBook(book);
         bookRepository.save(book);
