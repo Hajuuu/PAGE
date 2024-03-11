@@ -2,8 +2,8 @@ package com.Hajuuu.page.controller;
 
 import com.Hajuuu.page.domain.LoginForm;
 import com.Hajuuu.page.domain.User;
-import com.Hajuuu.page.repository.UserRepository;
 import com.Hajuuu.page.service.LoginService;
+import com.Hajuuu.page.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Slf4j
 @Controller
@@ -22,20 +24,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class HomeController {
 
     private final LoginService loginService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/")
-    public String homeLogin(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            return "home";
-        }
-
-        User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
+    public String homeLogin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
+                            Model model) {
         if (loginUser == null) {
             return "home";
         }
-
         model.addAttribute("user", loginUser);
         return "loginHome";
     }
@@ -48,8 +44,8 @@ public class HomeController {
 
     @PostMapping("/join")
     public String saveUser(@ModelAttribute("user") User user) {
-        userRepository.save(user);
-        return "redirect:/book/new";
+        userService.join(user);
+        return "redirect:/";
     }
 
     @GetMapping("/login")
@@ -58,7 +54,9 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("loginForm") LoginForm form, HttpServletRequest request) {
+    public String login(@ModelAttribute("loginForm") LoginForm form,
+                        @RequestParam(defaultValue = "/", name = "redirectURL") String redirectURL,
+                        HttpServletRequest request) {
         User loginMember = loginService.login(form.getLoginId(), form.getPassword());
 
         log.info("login? {}", loginMember);
@@ -66,7 +64,8 @@ public class HomeController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_USER, loginMember);
 
-        return "redirect:/";
+        log.info(redirectURL);
+        return "redirect:" + redirectURL;
     }
 
     @PostMapping("/logout")
@@ -75,7 +74,7 @@ public class HomeController {
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/book/new";
+        return "redirect:/";
     }
 
     private void expireCookie(HttpServletResponse response, String cookieName) {
