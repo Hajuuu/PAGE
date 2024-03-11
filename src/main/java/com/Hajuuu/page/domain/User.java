@@ -6,29 +6,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
-    private String passWord;
+    @NotEmpty
+    private String loginId;
+    @NotEmpty
+    private String password;
     private String name;
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> posts = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
-    public void createUser(String passWord, String name, String email) {
-        this.passWord = passWord;
-        this.name = name;
-        this.email = email;
+    public void createUser(String loginId, String passWord) {
+        this.loginId = loginId;
+        this.password = passWord;
     }
 
 }
