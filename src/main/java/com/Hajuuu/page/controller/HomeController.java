@@ -4,6 +4,7 @@ import com.Hajuuu.page.domain.LoginForm;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.LoginService;
 import com.Hajuuu.page.service.UserService;
+import com.Hajuuu.page.web.argumentresolver.Login;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Slf4j
 @Controller
@@ -27,7 +27,7 @@ public class HomeController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String homeLogin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
+    public String homeLogin(@Login User loginUser,
                             Model model) {
         if (loginUser == null) {
             return "home";
