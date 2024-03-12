@@ -4,6 +4,7 @@ import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
 import com.Hajuuu.page.service.UserService;
+import com.Hajuuu.page.web.argumentresolver.Login;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Slf4j
 @Controller
@@ -24,12 +24,9 @@ public class UserController {
 
 
     @GetMapping("/users/books")
-    public String findUserBooks(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
+    public String findUserBooks(@Login User loginUser,
                                 Model model) {
 
-        if (loginUser == null) {
-            return "redirect:/login";
-        }
         List<Book> books = userService.findBooks(loginUser.getLoginId());
 
         model.addAttribute("books", books);
