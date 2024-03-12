@@ -23,14 +23,14 @@ public class BookService {
         Book book = new Book();
         book.createBook(loginUser, searchBookDTO.getTitle(), searchBookDTO.getAuthor(), searchBookDTO.getPage(),
                 searchBookDTO.getImage(), searchBookDTO.getIsbn(), searchBookDTO.getBookState());
-        validateDuplicateBook(book);
+        validateDuplicateBook(loginUser.getId(), searchBookDTO.getIsbn());
         bookRepository.save(book);
         return book.getId();
     }
 
-    private void validateDuplicateBook(Book book) {
-        List<Book> findBooks = bookRepository.findAllByTitle(book.getTitle());
-        if (!findBooks.isEmpty()) {
+    private void validateDuplicateBook(Long userId, String isbn) {
+        List<Book> findBooks = bookRepository.findAllById(userId);
+        if (findBooks.stream().filter(b -> b.getIsbn().equals(isbn)).count() > 0) {
             throw new IllegalStateException("이미 저장한 책이에요!");
         }
     }
