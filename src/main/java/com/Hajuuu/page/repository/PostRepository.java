@@ -2,6 +2,7 @@ package com.Hajuuu.page.repository;
 
 import com.Hajuuu.page.domain.Post;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,14 +11,11 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class PostRepository {
 
-    private final EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
     public void save(Post post) {
-        if(post.getId() == null) {
-            em.persist(post);
-        } else {
-            em.merge(post);
-        }
+        em.persist(post);
     }
 
     public Post findOne(Long id) {
@@ -26,5 +24,11 @@ public class PostRepository {
 
     public List<Post> findAll() {
         return em.createQuery("select i from Post i", Post.class).getResultList();
+    }
+
+    public List<Post> findAllById(Long bookId) {
+        return em.createQuery("select i from Post i where i.book.id = :bookId", Post.class)
+                .setParameter("bookId", bookId)
+                .getResultList();
     }
 }
