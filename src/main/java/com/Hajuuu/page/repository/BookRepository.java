@@ -2,6 +2,7 @@ package com.Hajuuu.page.repository;
 
 import com.Hajuuu.page.domain.Book;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,14 +11,11 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class BookRepository {
 
-    private final EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
     public void save(Book book) {
-        if (book.getId() == null) {
-            em.persist(book);
-        } else {
-            em.merge(book);
-        }
+        em.persist(book);
     }
 
     public Book findOne(Long id) {
