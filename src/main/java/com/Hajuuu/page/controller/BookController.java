@@ -1,11 +1,11 @@
 package com.Hajuuu.page.controller;
 
+import com.Hajuuu.page.DTO.SearchBookDTO;
 import com.Hajuuu.page.api.AladinBookDTO;
 import com.Hajuuu.page.api.AladinBookInfo;
 import com.Hajuuu.page.api.AladinSearchService;
 import com.Hajuuu.page.api.NaverBookInfo;
 import com.Hajuuu.page.api.NaverSearchService;
-import com.Hajuuu.page.api.SearchBookDTO;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
 import com.Hajuuu.page.web.argumentresolver.Login;
@@ -67,11 +67,12 @@ public class BookController {
 
         bookService.saveBook(loginUser, searchBookDTO);
 
-        return "redirect:/users/books";
+        return "redirect:/books";
     }
 
     @PostMapping(value = "/book/{isbn}/select")
-    public String selectBook(@PathVariable("isbn") String isbn, RedirectAttributes redirectAttributes,
+    public String selectBook(@PathVariable("isbn") String isbn,
+                             RedirectAttributes redirectAttributes,
                              Model model)
             throws IOException {
 
