@@ -9,7 +9,6 @@ import com.Hajuuu.page.api.NaverSearchService;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
 import com.Hajuuu.page.web.argumentresolver.Login;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,55 +44,59 @@ public class BookController {
     @PostMapping("/book/new")
     public String addBook(@Login User loginUser,
                           @ModelAttribute("books") SearchBookDTO searchBookDTO,
-                          BindingResult bindingResult,
-                          Model model) {
+                          BindingResult bindingResult, Model model) {
 
         //검증 로직
+        if (!StringUtils.hasText(searchBookDTO.getImage())) {
+            bindingResult.addError(new FieldError("searchBookDTO", "image", searchBookDTO.getImage(), false, null, null,
+                    "이미지를 입력해주세요!"));
+        }
         if (!StringUtils.hasText(searchBookDTO.getTitle())) {
-            bindingResult.addError(new FieldError("searchBookDTO", "title", "제목을 입력해주세요!"));
+            bindingResult.addError(new FieldError("searchBookDTO", "title", searchBookDTO.getTitle(), false, null, null,
+                    "제목을 입력해주세요!"));
         }
         if (!StringUtils.hasText(searchBookDTO.getAuthor())) {
-            bindingResult.addError(new FieldError("searchBookDTO", "author", "저자를 입력해주세요!"));
+            bindingResult.addError(
+                    new FieldError("searchBookDTO", "author", searchBookDTO.getAuthor(), false, null, null,
+                            "저자를 입력해주세요!"));
+        }
+        if (!StringUtils.hasText(searchBookDTO.getIsbn())) {
+            bindingResult.addError(new FieldError("searchBookDTO", "isbn", searchBookDTO.getIsbn(), false, null, null,
+                    "isbn을 입력해주세요!"));
         }
         if (searchBookDTO.getPage() < 1) {
-            bindingResult.addError(new FieldError("searchBookDTO", "page", "페이지는 1장 이상 입력해주세요"));
+            bindingResult.addError(new FieldError("searchBookDTO", "page", searchBookDTO.getPage(), false,
+                    new String[]{"min.book.page"}, null, null));
         }
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
+            searchBookDTO.setImage(image);
             return "search/createBookForm";
         }
-        searchBookDTO.setImage(image);
 
+        searchBookDTO.setImage(image);
         bookService.saveBook(loginUser, searchBookDTO);
 
         return "redirect:/books";
     }
 
     @PostMapping(value = "/book/{isbn}/select")
-    public String selectBook(@PathVariable("isbn") String isbn,
-                             RedirectAttributes redirectAttributes,
-                             Model model)
-            throws IOException {
-
-        Long page = getAladinInfo(isbn);
-        String title = "";
-        String author = "";
+    public String selectBook(@PathVariable("isbn") String isbn, RedirectAttributes redirectAttributes) {
         List<NaverBookInfo> naverBookInfos = naverSearchService.getBookInfo(isbn).getItems();
+        image = naverBookInfos.get(0).getImage();
+        SearchBookDTO searchBookDTO = SearchBookDTO.builder()
+                .title(naverBookInfos.get(0).getTitle())
+                .author(naverBookInfos.get(0).getAuthor())
+                .image(image)
+                .isbn(isbn)
+                .page(getAladinInfo(isbn)).build();
 
-        for (NaverBookInfo item : naverBookInfos) {
-            title = item.getTitle();
-            author = item.getAuthor();
-            image = item.getImage();
-        }
-        SearchBookDTO searchBookDTO = SearchBookDTO.builder().page(page).image(image).isbn(isbn).title(title)
-                .author(author)
-                .build();
         redirectAttributes.addFlashAttribute("books", searchBookDTO);
         return "redirect:/book/new";
     }
 
-    private Long getAladinInfo(String isbn) throws IOException {
+    private Long getAladinInfo(String isbn) {
         AladinBookDTO aladinBookDTO = aladinSearchService.getBookInfo(isbn);
         List<AladinBookInfo> aladinBookInfos = aladinBookDTO.getItem();
         Long page = 0L;
