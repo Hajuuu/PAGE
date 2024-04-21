@@ -14,8 +14,9 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(User user) {
+    public User save(User user) {
         em.persist(user);
+        return user;
     }
 
     public User findOne(Long id) {
