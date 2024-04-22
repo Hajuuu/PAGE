@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/assets/css/styles.min.css"/>
+    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <div th:replace="fragments/sidebar :: sidebar"/>
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <div th:replace="fragments/header :: header"/>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-semibold mb-4">독서 기록</h5>
+                        <div class="card">
+                            <form th:action="@{/post/save}" th:object="${posts}" method="post"
+                                  enctype="multipart/form-data">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">독후감</label>
+                                        <input type="text" class="form-control" th:field="${posts.content}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="hidden" class="form-control" th:field="${posts.bookId}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">읽은 페이지</label>
+                                        <input type="number" class="form-control" id="page" th:field="${posts.page}">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/sidebarmenu.js"></script>
+<script src="../assets/js/app.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+
+</body>
+
+
+</html>
