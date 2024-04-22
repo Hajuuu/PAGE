@@ -43,8 +43,6 @@ public class UserController {
     public String createPost(@Login User loginUser, @PathVariable("bookId") Long bookId, Model model) {
         Book book = bookService.findOne(bookId);
         PostFormDTO postForm = new PostFormDTO();
-        postForm.setTitle(book.getTitle());
-        postForm.setBookState(book.getBookState());
         postForm.setBookId(bookId);
         log.info(String.valueOf(bookId));
         model.addAttribute("posts", postForm);
@@ -53,14 +51,14 @@ public class UserController {
     }
 
     @PostMapping("/post/save")
-    public String savePost(@Login User loginUser, @ModelAttribute("posts") PostFormDTO postFormDTO) {
+    public String savePost(@Login User loginUser, @ModelAttribute("post") PostFormDTO postFormDTO) {
 
         Long bookId = postFormDTO.getBookId();
         Post post = new Post();
         Book book = bookService.findOne(bookId);
         log.info(postFormDTO.getContent());
-        log.info(String.valueOf(postFormDTO.getPage()));
-        post.createPost(book, loginUser, postFormDTO.getContent(), postFormDTO.getPage());
+        book.changePage(postFormDTO.getPage());
+        post.createPost(book, loginUser, postFormDTO.getContent());
         postService.savePost(post);
 
         log.info("포스트 저장");
@@ -69,7 +67,7 @@ public class UserController {
 
     @GetMapping("/books/{bookId}/posts")
     public String allPosts(@PathVariable("bookId") Long bookId, Model model) {
-        List<Post> posts = postService.findPosts(bookId);
+        List<PostFormDTO> posts = postService.findPosts(bookId);
         Book book = bookService.findOne(bookId);
         model.addAttribute("book", book);
         model.addAttribute("posts", posts);
