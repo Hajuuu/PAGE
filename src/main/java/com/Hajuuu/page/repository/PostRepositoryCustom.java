@@ -1,0 +1,9 @@
+package com.Hajuuu.page.repository;
+
+import com.Hajuuu.page.DTO.PostFormDTO;
+import java.util.List;
+
+public interface PostRepositoryCustom {
+
+    List<PostFormDTO> search(Long bookId);
+}
