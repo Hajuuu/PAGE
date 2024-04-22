@@ -1,8 +1,10 @@
 package com.Hajuuu.page.service;
 
+import com.Hajuuu.page.DTO.PostFormDTO;
 import com.Hajuuu.page.domain.Post;
 import com.Hajuuu.page.repository.PostRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +24,11 @@ public class PostService {
         return post.getId();
     }
 
-    public Post findOne(Long postId) {
-        return postRepository.findOne(postId);
+    public Optional<Post> findOne(Long postId) {
+        return postRepository.findById(postId);
     }
 
-    public List<Post> findPosts(Long bookId) {
-        return postRepository.findAllById(bookId);
+    public List<PostFormDTO> findPosts(Long bookId) {
+        return postRepository.search(bookId);
     }
 }
