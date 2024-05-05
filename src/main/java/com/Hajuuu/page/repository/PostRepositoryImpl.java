@@ -19,7 +19,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostFormDTO> search(Long bookId) {
+    public List<PostFormDTO> search(int bookId) {
         return queryFactory
                 .select(new QPostFormDTO(
                         post.content,
@@ -31,7 +31,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression bookIdEq(Long bookId) {
+    private BooleanExpression bookIdEq(int bookId) {
         return isEmpty(String.valueOf(bookId)) ? null : post.book.id.eq(bookId);
     }
 
