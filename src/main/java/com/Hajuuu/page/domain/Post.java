@@ -19,7 +19,7 @@ public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "post_id")
-    private Long id;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
@@ -30,17 +30,15 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     private String content;
-    private Long page;
 
     public String getBookName() {
         return book.getTitle();
     }
 
 
-    public void createPost(Book book, User user, String content, Long page) {
+    public void createPost(Book book, User user, String content) {
         this.book = book;
         this.user = user;
         this.content = content;
-        this.page = page;
     }
 }
