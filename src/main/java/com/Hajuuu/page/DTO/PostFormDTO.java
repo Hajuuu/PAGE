@@ -11,11 +11,11 @@ public class PostFormDTO {
 
     private String content;
     private LocalDateTime date;
-    private Long bookId;
+    private int bookId;
     private Long page;
 
     @QueryProjection
-    public PostFormDTO(String content, LocalDateTime date, Long bookId, Long page) {
+    public PostFormDTO(String content, LocalDateTime date, int bookId, Long page) {
         this.content = content;
         this.date = date;
         this.bookId = bookId;
