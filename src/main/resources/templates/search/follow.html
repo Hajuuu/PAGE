@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
+          href="../assets/css/styles.min.css"/>
+    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <div th:replace="fragments/sidebar :: sidebar"/>
+
+    <div class="body-wrapper">
+        <div th:replace="fragments/header :: header"/>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <h5 class="card-title fw-semibold mb-4">회원의 id를 검색해주세요</h5>
+                <form th:action="@{/search/user}" method="post">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" value="id를 입력하세요" th:value="${loginId}"
+                           name="loginId">
+                </form>
+            </div>
+
+        </div>
+        <div class="container-fluid">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                        <tr>
+                            <th class="border-bottom-0">
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">id</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">1</h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-1" th:text="${user.loginId}"></h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <a th:class="${user.check} ? 'btn btn-dark m-1' : 'btn btn-info m-1'"
+                                   th:href="${user.check} ? 'javascript:cancel('+${user.id}+')' : 'javascript:follow('+${user.id}+')'">팔로우</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/sidebarmenu.js"></script>
+<script src="../assets/js/app.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+<script>
+ function follow(userId) {
+ var form = document.createElement("form");
+ form.setAttribute("method", "post");
+ form.setAttribute("action", "/search/follow/" + userId);
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+
+
+
+
+
+
+
+
+</script>
+<script>
+ function cancel(userId) {
+ var form = document.createElement("form");
+ form.setAttribute("method", "post");
+ form.setAttribute("action", "/search/cancel/" + userId);
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+
+
+
+
+
+
+
+
+
+</script>
