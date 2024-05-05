@@ -1,5 +1,7 @@
 package com.Hajuuu.page.service;
 
+import com.Hajuuu.page.DTO.PostDTO;
+import com.Hajuuu.page.DTO.SearchUserDTO;
 import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.repository.UserRepository;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
 
@@ -19,7 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long join(User user) {
+    public int join(User user) {
         validateDuplicateUser(user.getLoginId());
         userRepository.save(user);
         return user.getId();
@@ -33,20 +34,31 @@ public class UserService {
 
     }
 
-    public Optional<User> findByLoginId(String loginId) {
-        return userRepository.findByLoginId(loginId);
+    public List<SearchUserDTO> search(String loginId) {
+        return userRepository.search(loginId);
     }
 
     public List<User> findUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> findOne(Long userId) {
+    public Optional<User> findOne(int userId) {
         return userRepository.findById(userId);
     }
 
     public List<Book> findBooks(String loginId) {
-        return findByLoginId(loginId).get().getBooks();
+        return userRepository.findByLoginId(loginId).get().getBooks();
     }
 
+    public void addFollowing(User user, int id) {
+        user.addFollowing(id);
+        Optional<User> followingUser = userRepository.findById(id);
+        followingUser.get().addFollower(user.getId());
+    }
+
+    public List<PostDTO> findFollowingUsersPost(User user) {
+        List<Integer> followingList = user.getFollowingList();
+        List<PostDTO> following = userRepository.following(followingList);
+        return following;
+    }
 }
