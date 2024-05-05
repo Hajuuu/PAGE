@@ -2,12 +2,15 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../assets/css/styles.min.css"/>
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
+          href="../assets/css/styles.min.css"/>
+    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
 <!--  Body Wrapper -->
-<h4 class="mb-3" th:text="|로그인: ${user.loginId}|">로그인 사용자 이름</h4>
+
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
      data-sidebar-position="fixed" data-header-position="fixed">
 
@@ -15,6 +18,7 @@
     <!--  Main wrapper -->
     <div class="body-wrapper">
         <div th:replace="fragments/header :: header"/>
+        <h4 class="mb-3" th:text="|로그인: ${user.loginId}|">로그인 사용자 이름</h4>
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="card">
@@ -24,12 +28,15 @@
                             <th:block th:each="book : ${books}">
                                 <div class="col-md-4">
                                     <div class="card">
-                                        <img th:src="${book.image}" class="card-img-top">
+                                        <a th:href="'javascript:posts('+${book.id}+')'"><img id="img"
+                                                                                             th:src="${book.image}"
+                                                                                             class="card-img-top"></a>
                                         <div class="card-body">
                                             <h5 class="card-title" th:text="${book.title}"></h5>
                                             <p class="card-text" th:text="${book.author}"></p>
                                             <p class="card-text" th:text="${book.bookState}"></p>
-                                            <a href="#" class="btn btn-success m-1">기록하기</a>
+                                            <a th:href="'javascript:select('+${book.id}+')'"
+                                               class="btn btn-success">선택</a>
                                         </div>
                                     </div>
                                 </div>
@@ -47,4 +54,32 @@
 <script src="../assets/js/sidebarmenu.js"></script>
 <script src="../assets/js/app.min.js"></script>
 <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+<script>
+ function select(bookId) {
+ var form = document.createElement("form");
+ form.setAttribute("method", "get");
+ form.setAttribute("action", "/books/" + bookId + "/new");
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+</script>
+<script>
+ function posts(bookId) {
+ var form = document.createElement("form");
+ form.setAttribute("method", "get");
+ form.setAttribute("action", "/books/" + bookId + "/posts");
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+
+
+
+
+
+
+</script>
 </body>
