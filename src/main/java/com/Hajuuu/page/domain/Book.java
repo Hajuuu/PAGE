@@ -13,17 +13,17 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Book {
 
     @Id
     @GeneratedValue
     @Column(name = "book_id")
-    private Long id;
+    private int id;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
@@ -49,6 +49,10 @@ public class Book {
         this.image = image;
         this.isbn = isbn;
         this.bookState = bookState;
+    }
+
+    public void changePage(Long page) {
+        this.page = page;
     }
 
 
