@@ -24,11 +24,11 @@ public class PostService {
         return post.getId();
     }
 
-    public Optional<Post> findOne(Long postId) {
+    public Optional<Post> findOne(int postId) {
         return postRepository.findById(postId);
     }
 
-    public List<PostFormDTO> findPosts(Long bookId) {
+    public List<PostFormDTO> findPosts(int bookId) {
         return postRepository.search(bookId);
     }
 }
