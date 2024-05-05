@@ -40,7 +40,7 @@ public class UserController {
 
 
     @GetMapping("/books/{bookId}/new")
-    public String createPost(@Login User loginUser, @PathVariable("bookId") Long bookId, Model model) {
+    public String createPost(@Login User loginUser, @PathVariable("bookId") int bookId, Model model) {
         Book book = bookService.findOne(bookId);
         PostFormDTO postForm = new PostFormDTO();
         postForm.setBookId(bookId);
@@ -53,7 +53,7 @@ public class UserController {
     @PostMapping("/post/save")
     public String savePost(@Login User loginUser, @ModelAttribute("post") PostFormDTO postFormDTO) {
 
-        Long bookId = postFormDTO.getBookId();
+        int bookId = postFormDTO.getBookId();
         Post post = new Post();
         Book book = bookService.findOne(bookId);
         log.info(postFormDTO.getContent());
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @GetMapping("/books/{bookId}/posts")
-    public String allPosts(@PathVariable("bookId") Long bookId, Model model) {
+    public String allPosts(@PathVariable("bookId") int bookId, Model model) {
         List<PostFormDTO> posts = postService.findPosts(bookId);
         Book book = bookService.findOne(bookId);
         model.addAttribute("book", book);
