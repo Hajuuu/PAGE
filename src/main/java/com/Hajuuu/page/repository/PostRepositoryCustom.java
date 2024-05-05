@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
 
-    List<PostFormDTO> search(Long bookId);
+    List<PostFormDTO> search(int bookId);
 }
