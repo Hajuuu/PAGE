@@ -18,7 +18,7 @@ public class BookRepository {
         em.persist(book);
     }
 
-    public Book findOne(Long id) {
+    public Book findOne(int id) {
         return em.find(Book.class, id);
     }
 
@@ -26,7 +26,7 @@ public class BookRepository {
         return em.createQuery("select i from Book i", Book.class).getResultList();
     }
 
-    public List<Book> findAllById(Long userId) {
+    public List<Book> findAllById(int userId) {
         return em.createQuery("select i from Book i where i.user.id = :userId", Book.class)
                 .setParameter("userId", userId)
                 .getResultList();
