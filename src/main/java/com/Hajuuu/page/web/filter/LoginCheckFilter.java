@@ -11,14 +11,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 
 @Slf4j
+@Component
 public class LoginCheckFilter implements Filter {
 
     private static final String[] whitelist = {"/", "/login", "/logout", "/join", "/css/*", "/assets/*",
             "js/*",
-            "/style.css"};
+            "/style.css", "/login/naverLogin"};
 
 
     @Override
