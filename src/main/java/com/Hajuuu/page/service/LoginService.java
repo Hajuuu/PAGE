@@ -1,9 +1,10 @@
 package com.Hajuuu.page.service;
 
+import com.Hajuuu.page.DTO.UserDTO;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.repository.UserRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Optional<User> login(String loginId, String password) {
-        return userRepository.findByLoginId(loginId)
-                .filter(m -> m.getPassword().equals(password));
+    public User login(UserDTO userDTO) {
+        User findUser = userRepository.findByLoginId(userDTO.getLoginId());
+        if (findUser == null) {
+            return null;
+        }
+        if (!bCryptPasswordEncoder.matches(userDTO.getPassword(), findUser.getPassword())) {
+            return null;
+        }
+        return findUser;
     }
 }
