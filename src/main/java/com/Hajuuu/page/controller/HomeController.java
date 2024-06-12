@@ -1,22 +1,25 @@
 package com.Hajuuu.page.controller;
 
 import com.Hajuuu.page.DTO.FollowDTO;
-import com.Hajuuu.page.DTO.PostDTO;
 import com.Hajuuu.page.DTO.UserDTO;
 import com.Hajuuu.page.domain.LoginForm;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.LoginService;
 import com.Hajuuu.page.service.UserService;
-import com.Hajuuu.page.web.argumentresolver.Login;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +27,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -35,16 +37,24 @@ public class HomeController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String homeLogin(@Login User loginUser,
+    public String homeLogin(User loginUser,
                             Model model) {
-        if (loginUser == null) {
-            model.addAttribute("loginUser", null);
-            return "home";
+
+        String loginId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+        GrantedAuthority auth = iter.next();
+        String role = auth.getAuthority();
+
+        User findUser = userService.findByLoginId(loginId);
+        if (findUser != null) {
+            model.addAttribute("user", findUser);
+            return "loginHome";
         }
-        List<PostDTO> posts = userService.findFollowingUsersPost(loginUser);
-        model.addAttribute("posts", posts);
-        model.addAttribute("user", loginUser);
-        return "loginHome";
+        return "home";
     }
 
     @GetMapping("/join")
@@ -60,10 +70,13 @@ public class HomeController {
             log.info("errors={}", bindingResult);
             return "/member/joinForm";
         }
-        User user = new User();
-        user.createUser(userDTO.getLoginId(), userDTO.getPassword());
-        userService.join(user);
+        userService.securityJoin(userDTO);
         return "redirect:/";
+    }
+
+    @GetMapping("/login/naverLogin")
+    public String loginNaver() {
+        return "redirect:/oauth2/authorization/naver";
     }
 
     @GetMapping("/mypage")
@@ -71,7 +84,7 @@ public class HomeController {
         List<FollowDTO> followList = new ArrayList<>();
         for (int i : users) {
             Optional<User> user = userService.findOne(i);
-            followList.add(new FollowDTO(user.get().getId(), user.get().getLoginId()));
+            followList.add(new FollowDTO(user.get().getId(), user.get().getEmail()));
         }
         model.addAttribute("users", followList);
         return "/my/mypage";
@@ -82,20 +95,6 @@ public class HomeController {
         return "/member/loginForm";
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute("loginForm") LoginForm form,
-                        @RequestParam(defaultValue = "/", name = "redirectURL") String redirectURL,
-                        HttpServletRequest request) {
-        Optional<User> loginMember = loginService.login(form.getLoginId(), form.getPassword());
-
-        log.info("login? {}", loginMember);
-
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_USER, loginMember.get());
-
-        log.info(redirectURL);
-        return "redirect:" + redirectURL;
-    }
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
