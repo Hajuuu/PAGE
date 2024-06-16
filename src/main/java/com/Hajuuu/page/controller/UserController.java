@@ -7,7 +7,6 @@ import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
 import com.Hajuuu.page.service.PostService;
 import com.Hajuuu.page.service.UserService;
-import com.Hajuuu.page.web.argumentresolver.Login;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +27,10 @@ public class UserController {
     private final PostService postService;
 
     @GetMapping("/books")
-    public String findUserBooks(@Login User loginUser,
+    public String findUserBooks(User loginUser,
                                 Model model) {
 
-        List<Book> books = userService.findBooks(loginUser.getLoginId());
+        List<Book> books = userService.findBooks(loginUser.getEmail());
 
         model.addAttribute("books", books);
         model.addAttribute("user", loginUser);
@@ -40,7 +39,7 @@ public class UserController {
 
 
     @GetMapping("/books/{bookId}/new")
-    public String createPost(@Login User loginUser, @PathVariable("bookId") int bookId, Model model) {
+    public String createPost(User loginUser, @PathVariable("bookId") int bookId, Model model) {
         Book book = bookService.findOne(bookId);
         PostFormDTO postForm = new PostFormDTO();
         postForm.setBookId(bookId);
@@ -51,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/post/save")
-    public String savePost(@Login User loginUser, @ModelAttribute("post") PostFormDTO postFormDTO) {
+    public String savePost(User loginUser, @ModelAttribute("post") PostFormDTO postFormDTO) {
 
         int bookId = postFormDTO.getBookId();
         Post post = new Post();
