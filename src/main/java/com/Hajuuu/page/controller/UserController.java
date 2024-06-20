@@ -1,13 +1,16 @@
 package com.Hajuuu.page.controller;
 
 import com.Hajuuu.page.DTO.PostFormDTO;
+import com.Hajuuu.page.DTO.SearchBookDTO;
 import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.Post;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
 import com.Hajuuu.page.service.PostService;
 import com.Hajuuu.page.service.UserService;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,9 +32,13 @@ public class UserController {
     @GetMapping("/books")
     public String findUserBooks(User loginUser,
                                 Model model) {
+        List<SearchBookDTO> books = bookService.search(loginUser.getId());
 
-        List<Book> books = userService.findBooks(loginUser.getEmail());
-
+        if (books == null) {
+            model.addAttribute("books", new ArrayList<Book>());
+            model.addAttribute("user", loginUser);
+            return "/my/books";
+        }
         model.addAttribute("books", books);
         model.addAttribute("user", loginUser);
         return "/my/books";
@@ -40,7 +47,7 @@ public class UserController {
 
     @GetMapping("/books/{bookId}/new")
     public String createPost(User loginUser, @PathVariable("bookId") int bookId, Model model) {
-        Book book = bookService.findOne(bookId);
+        Optional<Book> book = bookService.findById(bookId);
         PostFormDTO postForm = new PostFormDTO();
         postForm.setBookId(bookId);
         log.info(String.valueOf(bookId));
@@ -54,10 +61,10 @@ public class UserController {
 
         int bookId = postFormDTO.getBookId();
         Post post = new Post();
-        Book book = bookService.findOne(bookId);
+        Optional<Book> book = bookService.findById(bookId);
         log.info(postFormDTO.getContent());
-        book.changePage(postFormDTO.getPage());
-        post.createPost(book, loginUser, postFormDTO.getContent());
+        book.get().changePage(postFormDTO.getPage());
+        post.createPost(book.get(), loginUser, postFormDTO.getContent());
         postService.savePost(post);
 
         log.info("포스트 저장");
@@ -67,7 +74,7 @@ public class UserController {
     @GetMapping("/books/{bookId}/posts")
     public String allPosts(@PathVariable("bookId") int bookId, Model model) {
         List<PostFormDTO> posts = postService.findPosts(bookId);
-        Book book = bookService.findOne(bookId);
+        Optional<Book> book = bookService.findById(bookId);
         model.addAttribute("book", book);
         model.addAttribute("posts", posts);
         return "/my/posts";
