@@ -1,18 +1,17 @@
 package com.Hajuuu.page.DTO;
 
 import com.Hajuuu.page.api.BookState;
+import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-@AllArgsConstructor
 public class SearchBookDTO {
 
     @NotBlank
@@ -34,4 +33,13 @@ public class SearchBookDTO {
     @Enumerated(EnumType.STRING)
     private BookState bookState;
 
+    @QueryProjection
+    public SearchBookDTO(String title, String image, Long page, String author, String isbn, BookState bookState) {
+        this.title = title;
+        this.image = image;
+        this.page = page;
+        this.author = author;
+        this.isbn = isbn;
+        this.bookState = bookState;
+    }
 }
