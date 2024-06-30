@@ -1,6 +1,9 @@
 package com.Hajuuu.page.DTO;
 
+import com.Hajuuu.page.domain.Role;
+import com.Hajuuu.page.domain.User;
 import com.querydsl.core.annotations.QueryProjection;
+import java.util.ArrayList;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,5 +18,15 @@ public class UserDTO {
     public UserDTO(String loginId, String password) {
         this.loginId = loginId;
         this.password = password;
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .loginId(this.loginId)
+                .password(this.password)
+                .followerList(new ArrayList<>())
+                .followingList(new ArrayList<>())
+                .role(Role.USER)
+                .build();
     }
 }
