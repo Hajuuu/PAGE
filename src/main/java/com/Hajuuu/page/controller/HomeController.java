@@ -49,17 +49,21 @@ public class HomeController {
         GrantedAuthority auth = iter.next();
         String role = auth.getAuthority();
 
+        log.info("시큐리티 " + SecurityContextHolder.getContext().getAuthentication());
         User findUser = userService.findByLoginId(loginId);
         if (findUser != null) {
             model.addAttribute("user", findUser);
+            model.addAttribute("name", loginId);
             return "loginHome";
         }
+        model.addAttribute("name", loginId);
         return "home";
     }
 
     @GetMapping("/join")
     public String joinForm(@ModelAttribute("user") UserDTO userDTO, Model model) {
         model.addAttribute("user", userDTO);
+
         return "/member/joinForm";
     }
 
@@ -79,15 +83,15 @@ public class HomeController {
         return "redirect:/oauth2/authorization/naver";
     }
 
-    @GetMapping("/mypage")
-    public String mypage(@ModelAttribute("users") List<Integer> users, Model model) {
+    @GetMapping("/my/myfollow")
+    public String myfollow(@ModelAttribute("users") List<Integer> users, Model model) {
         List<FollowDTO> followList = new ArrayList<>();
         for (int i : users) {
             Optional<User> user = userService.findOne(i);
-            followList.add(new FollowDTO(user.get().getId(), user.get().getEmail()));
+            followList.add(new FollowDTO(user.get().getId(), user.get().getLoginId()));
         }
         model.addAttribute("users", followList);
-        return "/my/mypage";
+        return "/my/myfollow";
     }
 
     @GetMapping("/login")
