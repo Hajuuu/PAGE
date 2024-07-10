@@ -2,34 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
-          href="../assets/css/styles.min.css"/>
+          href="../assets/css/styles.min.css?after"/>
     <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
      data-sidebar-position="fixed" data-header-position="fixed">
-    <div
-            class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
         <div class="d-flex align-items-center justify-content-center w-100">
             <div class="row justify-content-center w-100">
                 <div class="col-md-8 col-lg-6 col-xxl-3">
                     <div class="card mb-0">
                         <div class="card-body">
-                            <p class="text-center">Your Social Campaigns</p>
-                            <form th:action="@{/login}" th:object="${loginForm}" method="post">
+                            <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                                <h2>PAGE</h2>
+                            </a>
+                            <form action="/loginProcess" method="post" th:object="${loginForm}">
+
+                                <a th:href="'javascript:naverLogin()'">
+                                    <img src="../css/btnG_완성형.png" class="form-control" height="50px">
+                                </a>
                                 <div class="mb-3">
                                     <label th:for="id" class="form-label">ID</label>
                                     <input type="text" class="form-control" th:field="*{loginId}">
                                 </div>
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <label th:for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control" th:field="*{password}">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Sign In</button>
+
+
+                                <button type="submit" class="btn btn-primary">로그인</button>
+
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <p class="fs-4 mb-0 fw-bold">New to Modernize?</p>
-                                    <a class="text-primary fw-bold ms-2" href="join">Create an account</a>
+                                    <p class="fs-4 mb-0 fw-bold">계정이 없으신가요?</p>
+                                    <a class="text-primary fw-bold ms-2" href="join">회원 가입</a>
                                 </div>
                             </form>
                         </div>
@@ -41,5 +49,37 @@
 </div>
 <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
 <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+ function naverLogin() {
+ var form = document.createElement("form");
+ form.setAttribute("method", "get");
+ form.setAttribute("action", "/login/naverLogin");
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 </body>
 </html>
