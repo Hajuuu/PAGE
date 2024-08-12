@@ -8,10 +8,13 @@ import com.Hajuuu.page.api.NaverBookInfo;
 import com.Hajuuu.page.api.NaverSearchService;
 import com.Hajuuu.page.domain.User;
 import com.Hajuuu.page.service.BookService;
-import com.Hajuuu.page.web.argumentresolver.Login;
+import com.Hajuuu.page.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +32,7 @@ public class BookController {
 
     private final NaverSearchService naverSearchService;
     private final AladinSearchService aladinSearchService;
+    private final UserService userService;
     private final BookService bookService;
 
     private static String image = "";
@@ -41,9 +45,8 @@ public class BookController {
     }
 
     @PostMapping("/book/new")
-    public String addBook(@Login User loginUser,
-                          @Validated @ModelAttribute("books") SearchBookDTO searchBookDTO,
-                          BindingResult bindingResult, Model model) {
+    public String addBook(@Validated @ModelAttribute("books") SearchBookDTO searchBookDTO,
+                          BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -51,9 +54,16 @@ public class BookController {
             return "search/createBookForm";
         }
 
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User loginUser = userService.findByLoginId(loginId);
+
         searchBookDTO.setImage(image);
         bookService.saveBook(loginUser, searchBookDTO);
 
+        redirectAttributes.addFlashAttribute("loginUser", loginUser);
         return "redirect:/books";
     }
 
