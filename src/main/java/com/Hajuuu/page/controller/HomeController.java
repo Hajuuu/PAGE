@@ -37,8 +37,7 @@ public class HomeController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String homeLogin(User loginUser,
-                            Model model) {
+    public String homeLogin(Model model) {
 
         String loginId = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -83,7 +82,7 @@ public class HomeController {
         return "redirect:/oauth2/authorization/naver";
     }
 
-    @GetMapping("/my/myfollow")
+    @GetMapping("/mypage/follow")
     public String myfollow(@ModelAttribute("users") List<Integer> users, Model model) {
         List<FollowDTO> followList = new ArrayList<>();
         for (int i : users) {
@@ -92,6 +91,14 @@ public class HomeController {
         }
         model.addAttribute("users", followList);
         return "/my/myfollow";
+    }
+
+    @GetMapping("/mypage")
+    public String mypage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal());
+        log.info(authentication.getName());
+        return "my/mypage";
     }
 
     @GetMapping("/login")
