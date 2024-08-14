@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <h5 class="card-title fw-semibold mb-4">제목을 검색해주세요</h5>
-                <form th:action="@{/search/naverBook}" method="post">
+                <form th:action="@{/search}" method="post">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" value="책 제목을 입력하세요" th:value="${title}"
                            name="title">
@@ -30,8 +30,6 @@
                     <table class="table text-nowrap mb-0 align-middle">
                         <thead class="text-dark fs-4">
                         <tr>
-                            <th class="border-bottom-0">
-                            </th>
                             <th class="border-bottom-0">
                                 <h6 class="fw-semibold mb-0">제목</h6>
                             </th>
@@ -47,9 +45,6 @@
                         </thead>
                         <tbody>
                         <tr th:each="book : ${items}">
-                            <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0">1</h6>
-                            </td>
                             <td class="border-bottom-0">
                                 <h6 class="fw-semibold mb-1" th:text="${book.title}" name="title"></h6>
                             </td>
@@ -87,6 +82,14 @@
  document.body.appendChild(form);
  form.submit();
  }
+
+
+
+
+
+
+
+
 
 
 
