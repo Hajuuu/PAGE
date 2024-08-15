@@ -15,7 +15,38 @@
     <div class="body-wrapper">
         <div th:replace="fragments/header :: header"/>
         <div class="container-fluid">
-            <h4 class="mb-3" th:text="|로그인: ${user.loginId}|">로그인 사용자 이름</h4>
+            <h4 class="mb-3" th:text="|로그인: ${user.email}|">로그인 사용자 이름</h4>
+            <div class="container-fluid">
+                <form th:action="@{/search/user}" method="get">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="submit" value="ID 검색하기">
+                </form>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5 class="card-title fw-semibold mb-3"></h5>
+                        <th:block th:each="post : ${posts}">
+                            <div class="mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${post.bookTitle}"></h5>
+                                        <p class="card-text" th:text="${post.content}"></p>
+                                        <p class="card-text" th:text="${post.createdTime}"></p>
+                                        <p class="card-text" th:text="${post.loginId}"></p>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
