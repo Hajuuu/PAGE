@@ -14,6 +14,7 @@ import lombok.Data;
 @Builder
 public class SearchBookDTO {
 
+    private int id;
     @NotBlank
     private String title;
 
@@ -34,7 +35,9 @@ public class SearchBookDTO {
     private BookState bookState;
 
     @QueryProjection
-    public SearchBookDTO(String title, String image, Long page, String author, String isbn, BookState bookState) {
+    public SearchBookDTO(int id, String title, String image, Long page, String author, String isbn,
+                         BookState bookState) {
+        this.id = id;
         this.title = title;
         this.image = image;
         this.page = page;
