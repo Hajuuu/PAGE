@@ -34,7 +34,7 @@
                     <form th:action="@{/book/new}" th:object="${books}" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-4">
-                                <img th:src="*{image}?:_" id="image">
+                                <img th:src="*{image}" id="image">
                             </div>
 
                             <div class="col-md-7">
