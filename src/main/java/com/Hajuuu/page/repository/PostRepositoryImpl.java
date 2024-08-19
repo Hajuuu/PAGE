@@ -25,7 +25,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                         post.content,
                         post.createdTime,
                         post.book.id,
-                        post.book.page))
+                        post.page))
                 .from(post)
                 .where(bookIdEq(bookId))
                 .fetch();
