@@ -1,5 +1,6 @@
 package com.Hajuuu.page.service;
 
+import com.Hajuuu.page.DTO.BookFormDTO;
 import com.Hajuuu.page.DTO.SearchBookDTO;
 import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.User;
@@ -21,11 +22,11 @@ public class BookService {
 
     @Transactional
     public long saveBook(User loginUser,
-                         SearchBookDTO searchBookDTO) {
+                         BookFormDTO bookFormDTO) {
         Book book = new Book();
-        book.createBook(loginUser, searchBookDTO.getTitle(), searchBookDTO.getAuthor(), searchBookDTO.getPage(),
-                searchBookDTO.getImage(), searchBookDTO.getIsbn(), searchBookDTO.getBookState());
-        validateDuplicateBook(loginUser.getId(), searchBookDTO.getIsbn());
+        book.createBook(loginUser, bookFormDTO.getTitle(), bookFormDTO.getAuthor(), bookFormDTO.getPage(),
+                bookFormDTO.getImage(), bookFormDTO.getIsbn(), bookFormDTO.getBookState());
+        validateDuplicateBook(loginUser.getId(), bookFormDTO.getIsbn());
         bookRepository.save(book);
         return book.getId();
     }
