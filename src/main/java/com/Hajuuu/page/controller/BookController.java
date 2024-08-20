@@ -1,6 +1,6 @@
 package com.Hajuuu.page.controller;
 
-import com.Hajuuu.page.DTO.SearchBookDTO;
+import com.Hajuuu.page.DTO.BookFormDTO;
 import com.Hajuuu.page.api.AladinBookDTO;
 import com.Hajuuu.page.api.AladinBookInfo;
 import com.Hajuuu.page.api.AladinSearchService;
@@ -38,19 +38,19 @@ public class BookController {
     private static String image = "";
 
     @GetMapping("/book/new")
-    public String bookForm(@ModelAttribute("books") SearchBookDTO searchBookDTO, Model model) {
-        model.addAttribute("books", searchBookDTO);
+    public String bookForm(@ModelAttribute("books") BookFormDTO bookFormDTO, Model model) {
+        model.addAttribute("books", bookFormDTO);
 
         return "/search/createBookForm";
     }
 
     @PostMapping("/book/new")
-    public String addBook(@Validated @ModelAttribute("books") SearchBookDTO searchBookDTO,
+    public String addBook(@Validated @ModelAttribute("books") BookFormDTO bookFormDTO,
                           BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            searchBookDTO.setImage(image);
+            bookFormDTO.setImage(image);
             return "search/createBookForm";
         }
 
@@ -60,8 +60,8 @@ public class BookController {
 
         User loginUser = userService.findByLoginId(loginId);
 
-        searchBookDTO.setImage(image);
-        bookService.saveBook(loginUser, searchBookDTO);
+        bookFormDTO.setImage(image);
+        bookService.saveBook(loginUser, bookFormDTO);
 
         redirectAttributes.addFlashAttribute("loginUser", loginUser);
         return "redirect:/books";
@@ -71,14 +71,14 @@ public class BookController {
     public String selectBook(@PathVariable("isbn") String isbn, RedirectAttributes redirectAttributes) {
         List<NaverBookInfo> naverBookInfos = naverSearchService.getBookInfo(isbn).getItems();
         image = naverBookInfos.get(0).getImage();
-        SearchBookDTO searchBookDTO = SearchBookDTO.builder()
+        BookFormDTO bookFormDTO = BookFormDTO.builder()
                 .title(naverBookInfos.get(0).getTitle())
                 .author(naverBookInfos.get(0).getAuthor())
                 .image(image)
                 .isbn(isbn)
                 .page(getAladinInfo(isbn)).build();
 
-        redirectAttributes.addFlashAttribute("books", searchBookDTO);
+        redirectAttributes.addFlashAttribute("books", bookFormDTO);
         return "redirect:/book/new";
     }
 
