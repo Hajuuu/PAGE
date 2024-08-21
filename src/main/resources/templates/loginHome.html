@@ -15,7 +15,7 @@
     <div class="body-wrapper">
         <div th:replace="fragments/header :: header"/>
         <div class="container-fluid">
-            <h4 class="mb-3" th:text="|로그인: ${user.email}|">로그인 사용자 이름</h4>
+            <h4 class="mb-3" th:text="|로그인: ${name}|">로그인 사용자 이름</h4>
             <div class="container-fluid">
                 <form th:action="@{/search/user}" method="get">
                     <i class="fa-solid fa-magnifying-glass"></i>

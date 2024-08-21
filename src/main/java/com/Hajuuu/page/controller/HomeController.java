@@ -11,14 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,19 +37,16 @@ public class HomeController {
     @GetMapping("/")
     public String homeLogin(Model model) {
 
-        String loginId = SecurityContextHolder.getContext().getAuthentication().getName();
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info(loginId);
+        User loginUser = userService.findByLoginId(loginId);
 
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-        GrantedAuthority auth = iter.next();
-        String role = auth.getAuthority();
-
-        log.info("시큐리티 " + SecurityContextHolder.getContext().getAuthentication());
-        User findUser = userService.findByLoginId(loginId);
-        if (findUser != null) {
-            model.addAttribute("user", findUser);
+        if (loginUser != null) {
+            log.info(loginUser.toString());
+            model.addAttribute("user", loginUser);
             model.addAttribute("name", loginId);
             return "loginHome";
         }
@@ -94,10 +89,13 @@ public class HomeController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getPrincipal());
-        log.info(authentication.getName());
+    public String mypage(@ModelAttribute("users") List<Integer> users, Model model) {
+        List<FollowDTO> followList = new ArrayList<>();
+        for (int i : users) {
+            Optional<User> user = userService.findOne(i);
+            followList.add(new FollowDTO(user.get().getId(), user.get().getLoginId()));
+        }
+        model.addAttribute("users", followList);
         return "my/mypage";
     }
 

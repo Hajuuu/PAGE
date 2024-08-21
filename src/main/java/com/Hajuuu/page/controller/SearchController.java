@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +31,13 @@ public class SearchController {
     private final UserService userService;
 
     @GetMapping("/search")
-    public String searchTitle(User loginUser, Model model) {
+    public String searchTitle(Model model) {
         model.addAttribute(new NaverBookInfo());
         return "/search/naverBook";
     }
 
     @PostMapping("/search")
-    public String searchBook(User loginUser, @ModelAttribute("title") String title,
+    public String searchBook(@ModelAttribute("title") String title,
                              Model model) {
         if (titleInvalid(title)) {
             return "/search/naverBook";
@@ -52,15 +55,16 @@ public class SearchController {
     }
 
     @GetMapping("/search/user")
-    public String searchForm(User loginUser, Model model) {
+    public String searchForm(Model model) {
         model.addAttribute("user", new UserDTO());
         return "/search/follow";
     }
 
     @PostMapping("/search/user")
-    public String searchUser(User loginUser, @ModelAttribute("loginId") String loginId,
+    public String searchUser(@ModelAttribute("loginId") String loginId,
                              Model model) {
 
+        User loginUser = userService.findByLoginId(loginId);
         if (titleInvalid(loginId)) {
             return "/search/follow";
         }
@@ -79,9 +83,14 @@ public class SearchController {
     }
 
     @PostMapping("/search/follow/{userId}")
-    public String follow(User loginUser, @PathVariable("userId") int id,
+    public String follow(@PathVariable("userId") int id,
                          RedirectAttributes redirectAttributes) {
 
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User loginUser = userService.findByLoginId(loginId);
         userService.addFollowing(loginUser, id);
         List<Integer> followingList = loginUser.getFollowingList();
         redirectAttributes.addFlashAttribute("users", followingList);
@@ -89,7 +98,12 @@ public class SearchController {
     }
 
     @PostMapping("/search/cancel/{userId}")
-    public String cancel(User loginUser, @PathVariable("userId") int id, Model model) {
+    public String cancel(@PathVariable("userId") int id, Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User loginUser = userService.findByLoginId(loginId);
         loginUser.cancelFollowing(id);
         Optional<User> user = userService.findOne(id);
         user.get().cancelFollower(loginUser.getId());
