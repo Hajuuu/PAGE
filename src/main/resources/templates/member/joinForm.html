@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
+          href="../assets/css/styles.min.css"/>
+    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center w-100">
+            <div class="row justify-content-center w-100">
+                <div class="col-md-8 col-lg-6 col-xxl-3">
+                    <div class="card mb-0">
+                        <div class="card-body">
+                            <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                                <h2>PAGE</h2>
+                            </a>
+                            <form th:action="@{/join}" th:object="${user}" method="post">
+                                <div class="mb-3">
+                                    <label th:for="loginId" class="form-label">ID</label>
+                                    <input type="text" class="form-control" th:errorclass="field-error"
+                                           th:field="*{loginId}">
+                                    <div class="field-error" th:errors="*{loginId}">ID를 입력해주세요</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label th:for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" th:errorclass="field-error"
+                                           th:field="*{password}">
+                                    <div class="field-error" th:errors="*{password}">비밀번호를 입력해주세요</div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">회원 가입</button>
+
+                            </form>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <p class="fs-4 mb-0 fw-bold">이미 계정이 있으신가요?</p>
+                                <a class="text-primary fw-bold ms-2" href="/login">로그인</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
