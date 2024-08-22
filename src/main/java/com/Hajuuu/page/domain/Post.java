@@ -30,15 +30,17 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     private String content;
+    private Long page;
 
     public String getBookName() {
         return book.getTitle();
     }
 
 
-    public void createPost(Book book, User user, String content) {
+    public void createPost(Book book, User user, String content, Long page) {
         this.book = book;
         this.user = user;
         this.content = content;
+        this.page = page;
     }
 }

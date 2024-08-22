@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,10 +33,12 @@ public class UserController {
     private final PostService postService;
 
     @GetMapping("/books")
-    public String findUserBooks(User loginUser,
-                                Model model) {
+    public String findUserBooks(Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+        User loginUser = userService.findByLoginId(loginId);
         List<SearchBookDTO> books = bookService.search(loginUser.getId());
-
         if (books == null) {
             model.addAttribute("books", new ArrayList<Book>());
             model.addAttribute("user", loginUser);
@@ -46,25 +51,26 @@ public class UserController {
 
 
     @GetMapping("/books/{bookId}/new")
-    public String createPost(User loginUser, @PathVariable("bookId") int bookId, Model model) {
+    public String createPost(@PathVariable("bookId") int bookId, Model model) {
         Optional<Book> book = bookService.findById(bookId);
         PostFormDTO postForm = new PostFormDTO();
         postForm.setBookId(bookId);
-        log.info(String.valueOf(bookId));
+        model.addAttribute("book", book.get());
         model.addAttribute("posts", postForm);
 
         return "/my/createPostForm";
     }
 
     @PostMapping("/post/save")
-    public String savePost(User loginUser, @ModelAttribute("post") PostFormDTO postFormDTO) {
-
+    public String savePost(@ModelAttribute("post") PostFormDTO postFormDTO) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+        User loginUser = userService.findByLoginId(loginId);
         int bookId = postFormDTO.getBookId();
         Post post = new Post();
         Optional<Book> book = bookService.findById(bookId);
-        log.info(postFormDTO.getContent());
-        book.get().changePage(postFormDTO.getPage());
-        post.createPost(book.get(), loginUser, postFormDTO.getContent());
+        post.createPost(book.get(), loginUser, postFormDTO.getContent(), postFormDTO.getPage());
         postService.savePost(post);
 
         log.info("포스트 저장");
@@ -75,7 +81,7 @@ public class UserController {
     public String allPosts(@PathVariable("bookId") int bookId, Model model) {
         List<PostFormDTO> posts = postService.findPosts(bookId);
         Optional<Book> book = bookService.findById(bookId);
-        model.addAttribute("book", book);
+        model.addAttribute("book", book.get());
         model.addAttribute("posts", posts);
         return "/my/posts";
     }
