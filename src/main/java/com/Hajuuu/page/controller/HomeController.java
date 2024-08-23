@@ -25,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -89,14 +90,29 @@ public class HomeController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(@ModelAttribute("users") List<Integer> users, Model model) {
+    public String mypage(@RequestParam(value = "users", required = false) List<Integer> users, Model model) {
         List<FollowDTO> followList = new ArrayList<>();
+        if (users == null) {
+            model.addAttribute("users", followList);
+            return "my/mypage";
+        }
         for (int i : users) {
             Optional<User> user = userService.findOne(i);
             followList.add(new FollowDTO(user.get().getId(), user.get().getLoginId()));
         }
         model.addAttribute("users", followList);
         return "my/mypage";
+    }
+
+    @GetMapping("/setting")
+    public String setting(Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User findUser = userService.findByLoginId(loginId);
+        model.addAttribute("image", findUser.getImage());
+        return "my/setting";
     }
 
     @GetMapping("/login")
