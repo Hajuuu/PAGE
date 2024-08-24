@@ -26,6 +26,7 @@ public class UserDTO {
                 .password(this.password)
                 .followerList(new ArrayList<>())
                 .followingList(new ArrayList<>())
+                .image("/assets/images/logos/user-regular.svg")
                 .role(Role.USER)
                 .build();
     }
