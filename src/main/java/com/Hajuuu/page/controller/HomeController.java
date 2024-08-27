@@ -111,7 +111,7 @@ public class HomeController {
         String loginId = authentication.getName();
 
         User findUser = userService.findByLoginId(loginId);
-        model.addAttribute("image", findUser.getImage());
+        model.addAttribute("user", findUser);
         return "my/setting";
     }
 
