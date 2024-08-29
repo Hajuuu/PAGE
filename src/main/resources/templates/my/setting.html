@@ -1,0 +1,249 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"/>
+</head>
+
+<body>
+<!--  Body Wrapper -->
+<div class="body-wrapper">
+    <div th:replace="fragments/header :: header"/>
+    <div class="container" data-layout="vertical">
+        <div class="card">
+                <div class="card-body">
+                    <div class="col-md-auto">
+                        <img th:src="${user.image}" id="image" class="radius_img">
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col col-lg-2">
+                            <a th:href="'javascript:upload()'" class="btn btn-secondary m-1">이미지 업로드</a>
+                        </div>
+                        <div class="col col-lg-2">
+                            <a th:href="'javascript:delete()'" class="btn btn-outline-secondary m-1">이미지 제거</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <label class="form-label">아이디</label>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" th:field="${user.loginId}">
+                        </div>
+                        <div class="col-sm-4">
+                            <a th:href="'javascript:upload()'" class="btn btn-secondary">아이디 변경</a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="card-body">
+                    <label class="card-title">비밀번호</label>
+                    <div class="card-text">
+                        <input type="text" class="form-control" placeholder="현재 비밀번호">
+                        <input type="text" class="form-control" placeholder="변경 비밀번호">
+                        <input type="text" class="form-control" placeholder="변경 비밀번호 확인">
+                    </div>
+                    <a th:href="'javascript:upload()'" class="btn btn-secondary m-1">비밀번호 변경</a>
+                </div>
+
+                <div class="card-body">
+                    <label class="form-label">이메일</label>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" th:field="${user.email}">
+                        </div>
+                        <div class="col-sm-4">
+                            <a th:href="'javascript:upload()'" class="btn btn-secondary">이메일 변경</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/sidebarmenu.js"></script>
+<script src="../assets/js/app.min.js"></script>
+<script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+<script>
+ function upload() {
+ var form = document.createElement("form");
+ form.setAttribute("method", "get");
+ form.setAttribute("action", "/books/" + bookId + "/new");
+ document.body.appendChild(form);
+ form.submit();
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script>
+ function delete() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
