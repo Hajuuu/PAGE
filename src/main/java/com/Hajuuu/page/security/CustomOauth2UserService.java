@@ -47,6 +47,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                     .loginId(loginId)
                     .name(name)
                     .email(email)
+                    .image("/assets/images/logos/user-regular.svg")
                     .followingList(new ArrayList<>())
                     .followerList(new ArrayList<>())
                     .provider(provider)
