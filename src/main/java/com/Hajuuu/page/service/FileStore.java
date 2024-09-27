@@ -2,19 +2,20 @@ package com.Hajuuu.page.service;
 
 
 import com.Hajuuu.page.domain.UploadFile;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FileStore {
 
-    @Value("${file.dir}")
+    @Value("${spring.servlet.multipart.location}")
     private String fileDir;
 
     public String getFullPath(String fileName) {
