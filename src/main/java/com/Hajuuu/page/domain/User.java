@@ -57,6 +57,14 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public void updateProfile(String image) {
+        this.image = image;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
     public void addFollowing(int id) {
         this.followingList.add(id);
     }
