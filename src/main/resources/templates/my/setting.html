@@ -16,7 +16,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-auto">
-                                <img th:src="${user.image}" id="image" class="radius_img">
+                                <img th:src="|/images/${user.image}"
+                                     onerror="this.src='/assets/images/logos/user-regular.svg'"
+                                     id="image"
+                                     class="radius_img" width="300" height="300">
                             </div>
                         </div>
 
@@ -125,12 +128,50 @@ function upload(element) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <script>
  function delete() {
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

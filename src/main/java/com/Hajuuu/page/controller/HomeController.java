@@ -14,11 +14,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,9 +32,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
@@ -101,14 +105,14 @@ public class HomeController {
         List<FollowDTO> followList = new ArrayList<>();
         if (users == null) {
             model.addAttribute("users", followList);
-            return "my/mypage";
+            return "/mypage";
         }
         for (int i : users) {
             Optional<User> user = userService.findOne(i);
             followList.add(new FollowDTO(user.get().getId(), user.get().getLoginId()));
         }
         model.addAttribute("users", followList);
-        return "my/mypage";
+        return "/mypage";
     }
 
     @GetMapping("/setting")
@@ -124,12 +128,19 @@ public class HomeController {
         settingDTO.setPassword(findUser.getPassword());
         settingDTO.setImage(findUser.getImage());
         model.addAttribute("user", settingDTO);
-        return "my/setting";
+        return "/my/setting";
+    }
+
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws
+            MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
     @PostMapping("/setting/fileupload")
     @Transactional
-    public String fileUpload(@ModelAttribute SettingDTO settingDTO, RedirectAttributes redirectAttributes)
+    public String fileUpload(@ModelAttribute SettingDTO settingDTO)
             throws IOException {
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -138,15 +149,15 @@ public class HomeController {
 
         UploadFile uploadFile = fileStore.storeFile(settingDTO.getImageFile());
 
-        String filename_url = uploadFile.getUploadName();
         String message = uploadFile.getUploadName() + " 파일이 저장되었습니다.";
 
+        //"D:\page\image\0b0cb23d-9c54-447f-8c5a-b7237d3e77fa.jpg"
         User findUser = userService.findByLoginId(loginId);
-        findUser.updateProfile(fileStore.getFullPath(uploadFile.getUploadName()));
-        redirectAttributes.addFlashAttribute("message", message);
-        redirectAttributes.addFlashAttribute("filename_url", filename_url);
+        findUser.updateProfile(uploadFile.getStoreName());
 
-        return "redirect:/";
+        String fileUrl = fileStore.getFullPath(findUser.getImage());
+
+        return "redirect:/setting";
     }
 
 
