@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -160,6 +163,26 @@ public class HomeController {
         return "redirect:/setting";
     }
 
+    @PostMapping("/setting/filedelete")
+    @Transactional
+    public String fileDelete(@ModelAttribute SettingDTO settingDTO)
+            throws IOException {
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User findUser = userService.findByLoginId(loginId);
+
+        String fileUrl = fileStore.getFullPath(findUser.getImage());
+
+        Path filePath = Paths.get("static", fileUrl);
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
+            findUser.deleteProfile();
+        }
+        return "redirect:/setting";
+    }
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
