@@ -61,6 +61,10 @@ public class User extends BaseTimeEntity {
         this.image = image;
     }
 
+    public void deleteProfile() {
+        this.image = null;
+    }
+
     public void updateEmail(String email) {
         this.email = email;
     }
