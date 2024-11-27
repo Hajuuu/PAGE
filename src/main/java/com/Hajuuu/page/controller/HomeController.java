@@ -66,6 +66,7 @@ public class HomeController {
             return "loginHome";
         }
         model.addAttribute("name", loginId);
+        model.addAttribute("user", loginUser);
         return "home";
     }
 
