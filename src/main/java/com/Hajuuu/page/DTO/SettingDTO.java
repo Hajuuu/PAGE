@@ -10,6 +10,7 @@ public class SettingDTO {
 
     private String loginId;
     private String password;
+    private String name;
     private MultipartFile imageFile;
     private String image;
     private String email;

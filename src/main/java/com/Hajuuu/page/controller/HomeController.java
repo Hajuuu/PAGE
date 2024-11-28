@@ -128,6 +128,7 @@ public class HomeController {
         User findUser = userService.findByLoginId(loginId);
         SettingDTO settingDTO = new SettingDTO();
         settingDTO.setLoginId(findUser.getLoginId());
+        settingDTO.setName(findUser.getName());
         settingDTO.setEmail(findUser.getEmail());
         settingDTO.setPassword(findUser.getPassword());
         settingDTO.setImage(findUser.getImage());
@@ -182,6 +183,19 @@ public class HomeController {
             Files.delete(filePath);
             findUser.deleteProfile();
         }
+        return "redirect:/setting";
+    }
+
+    @PostMapping("/setting/updateName")
+    @Transactional
+    public String updateName(@ModelAttribute("user") SettingDTO settingDTO) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User findUser = userService.findByLoginId(loginId);
+        findUser.updateName(settingDTO.getName());
+
         return "redirect:/setting";
     }
 
