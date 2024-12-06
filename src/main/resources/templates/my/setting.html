@@ -101,17 +101,20 @@
                             </div>
                         </form>
 
-                        <div class="mb-2">
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" placeholder="변경 비밀번호">
-                                <input type="text" class="form-control" placeholder="변경 비밀번호 확인">
+                        <th:block th:if="${user.check}">
+                            <div class="mb-2">
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" placeholder="변경 비밀번호">
+                                    <input type="text" class="form-control" placeholder="변경 비밀번호 확인">
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-2">
-                            <div class="col-sm-4">
-                                <a th:href="'javascript:upload()'" class="btn btn-secondary">비밀번호 변경</a>
+                            <div class="mb-2">
+                                <div class="col-sm-4">
+                                    <a th:href="'javascript:upload()'" class="btn btn-secondary">비밀번호 변경</a>
+                                </div>
                             </div>
-                        </div>
+                        </th:block>
+
                     </div>
                 </div>
             </th:block>

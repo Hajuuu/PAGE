@@ -132,6 +132,7 @@ public class HomeController {
         settingDTO.setEmail(findUser.getEmail());
         settingDTO.setPassword(findUser.getPassword());
         settingDTO.setImage(findUser.getImage());
+        settingDTO.setCheck(false);
         model.addAttribute("user", settingDTO);
         return "/my/setting";
     }
@@ -197,6 +198,24 @@ public class HomeController {
         findUser.updateName(settingDTO.getName());
 
         return "redirect:/setting";
+    }
+
+    @PostMapping("/setting/checkPassword")
+    public String checkPassword(@ModelAttribute("user") SettingDTO settingDTO, Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+
+        User findUser = userService.findByLoginId(loginId);
+        settingDTO.setLoginId(findUser.getLoginId());
+        settingDTO.setName(findUser.getName());
+        settingDTO.setEmail(findUser.getEmail());
+        settingDTO.setPassword(findUser.getPassword());
+        settingDTO.setImage(findUser.getImage());
+        boolean matches = userService.checkPassword(settingDTO);
+        settingDTO.setCheck(matches);
+        model.addAttribute("user", settingDTO);
+        return "/my/setting";
     }
 
     @GetMapping("/login")

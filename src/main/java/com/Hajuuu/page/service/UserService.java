@@ -2,6 +2,7 @@ package com.Hajuuu.page.service;
 
 import com.Hajuuu.page.DTO.PostDTO;
 import com.Hajuuu.page.DTO.SearchUserDTO;
+import com.Hajuuu.page.DTO.SettingDTO;
 import com.Hajuuu.page.DTO.UserDTO;
 import com.Hajuuu.page.domain.Book;
 import com.Hajuuu.page.domain.User;
@@ -79,5 +80,13 @@ public class UserService {
     public User findByLoginId(String loginId) {
         User findUser = userRepository.findByLoginId(loginId);
         return findUser;
+    }
+
+    public boolean checkPassword(SettingDTO settingDTO) {
+        User findUser = userRepository.findByLoginId(settingDTO.getLoginId());
+        if (!bCryptPasswordEncoder.matches(settingDTO.getCheckPassword(), findUser.getPassword())) {
+            return false;
+        }
+        return true;
     }
 }

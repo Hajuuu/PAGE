@@ -14,4 +14,6 @@ public class SettingDTO {
     private MultipartFile imageFile;
     private String image;
     private String email;
+    private String checkPassword;
+    private boolean check;
 }
