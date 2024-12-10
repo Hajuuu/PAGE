@@ -218,6 +218,16 @@ public class HomeController {
         return "/my/setting";
     }
 
+    @PostMapping("/setting/changePassword")
+    public String changePassword(@ModelAttribute("user") SettingDTO settingDTO) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+        settingDTO.setLoginId(loginId);
+        userService.changePassword(settingDTO);
+        return "redirect:/setting";
+    }
+
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
         return "/member/loginForm";

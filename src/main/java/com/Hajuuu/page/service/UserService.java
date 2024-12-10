@@ -10,10 +10,13 @@ import com.Hajuuu.page.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -88,5 +91,14 @@ public class UserService {
             return false;
         }
         return true;
+    }
+
+    @Transactional
+    public void changePassword(SettingDTO settingDTO) {
+        User findUser = userRepository.findByLoginId(settingDTO.getLoginId());
+        if (settingDTO.getChangePassword().equals(settingDTO.getCheckChangePassword())) {
+            findUser.updatePassword(bCryptPasswordEncoder.encode(settingDTO.getChangePassword()));
+        }
+
     }
 }

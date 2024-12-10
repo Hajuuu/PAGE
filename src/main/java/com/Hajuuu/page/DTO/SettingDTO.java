@@ -15,5 +15,7 @@ public class SettingDTO {
     private String image;
     private String email;
     private String checkPassword;
+    private String changePassword;
+    private String checkChangePassword;
     private boolean check;
 }

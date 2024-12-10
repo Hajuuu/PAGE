@@ -89,4 +89,7 @@ public class User extends BaseTimeEntity {
         return this.role.getKey();
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
