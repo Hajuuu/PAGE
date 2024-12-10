@@ -96,7 +96,7 @@
                         <form th:action="@{/setting/checkPassword}" method="post">
                             <div class="mb-2">
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" th:field="${user.checkPassword}"
+                                    <input type="password" class="form-control" th:field="${user.checkPassword}"
                                            placeholder="현재 비밀번호">
                                 </div>
                             </div>
@@ -111,9 +111,10 @@
                             <form th:action="@{/setting/changePassword}" method="post">
                                 <div class="mb-2">
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" th:field="${user.changePassword}"
+                                        <input type="password" class="form-control" th:field="${user.changePassword}"
                                                placeholder="변경 비밀번호">
-                                        <input type="text" class="form-control" th:field="${user.checkChangePassword}"
+                                        <input type="password" class="form-control"
+                                               th:field="${user.checkChangePassword}"
                                                placeholder="변경 비밀번호 확인">
                                     </div>
                                 </div>
