@@ -228,6 +228,17 @@ public class HomeController {
         return "redirect:/setting";
     }
 
+    @PostMapping("/setting/updateEmail")
+    @Transactional
+    public String updateEmail(@ModelAttribute("user") SettingDTO settingDTO) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String loginId = authentication.getName();
+        User findUser = userService.findByLoginId(loginId);
+        findUser.updateEmail(settingDTO.getEmail());
+        return "redirect:/setting";
+    }
+
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
         return "/member/loginForm";
