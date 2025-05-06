@@ -1,0 +1,78 @@
+.field-error {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.container > img {
+  position: absolute;
+}
+
+#naver-button {
+  background: url(../css/btnG_완성형.png) no-repeat center;
+  background-size: 100% 50%;
+  width: 100%;
+  height: 24px;
+  background-position: center;
+  border-radius: 0.25rem;
+
+}
+
+#naver-button:hover {
+    color: grey;
+}
+
+#naver-button:focus {
+    online: none;
+}
+#follow {
+    width: 50px;
+    height: 30px;
+
+    display:flex;
+    text-align: center;
+    color: blue;
+
+    background-color: blue;
+}
+
+#unfollow {
+    width: 50px;
+    height: 30px;
+
+    display:flex;
+    text-align: center;
+    color: blue;
+
+    background-color: grey;
+}
+
+#card-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#image {
+  width: 220px;
+  height: 280px;
+  background-image: url("/image-regular.svg") no-repeat 5px center;
+}
+input {
+  font-size: 15px;
+  color: #222222;
+  width: 660px;
+  border: none;
+  border-bottom: solid #aaaaaa 1px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  background: none;
+  z-index: 5;
+  text-align: left;
+}
+
+.radius_img {
+   border-radius: 50%
+}
+
+
+input::placeholder { color: #aaaaaa; }
+input:focus { outline: none; }
