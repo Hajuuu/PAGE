@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/post/save")
-    public String savePost(@ModelAttribute("post") PostFormDTO postFormDTO) {
+    public String savePost(@ModelAttribute("posts") PostFormDTO postFormDTO) {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         String loginId = authentication.getName();
@@ -70,7 +70,8 @@ public class UserController {
         int bookId = postFormDTO.getBookId();
         Post post = new Post();
         Optional<Book> book = bookService.findById(bookId);
-        post.createPost(book.get(), loginUser, postFormDTO.getContent(), postFormDTO.getPage());
+        post.createPost(book.get(), loginUser, postFormDTO.getContent(), postFormDTO.getStartPage(),
+                postFormDTO.getEndPage());
         postService.savePost(post);
 
         log.info("포스트 저장");
@@ -79,7 +80,7 @@ public class UserController {
 
     @GetMapping("/books/{bookId}/posts")
     public String allPosts(@PathVariable("bookId") int bookId, Model model) {
-        List<PostFormDTO> posts = postService.findPosts(bookId);
+        List<Post> posts = postService.getPostsByBook(bookId);
         Optional<Book> book = bookService.findById(bookId);
         model.addAttribute("book", book.get());
         model.addAttribute("posts", posts);

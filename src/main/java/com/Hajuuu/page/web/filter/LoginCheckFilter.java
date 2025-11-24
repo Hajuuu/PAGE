@@ -1,25 +1,20 @@
 package com.Hajuuu.page.web.filter;
 
 import com.Hajuuu.page.controller.SessionConst;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 
+import java.io.IOException;
+
 @Slf4j
-@Component
 public class LoginCheckFilter implements Filter {
 
-    private static final String[] whitelist = {"/", "/login", "/logout", "/join", "/css/*", "/assets/*",
-            "js/*",
+    private static final String[] whitelist = {"/", "/login", "/logout", "/join", "/css/**", "/assets/**",
+            "/js/**",
             "/style.css", "/login/naverLogin"};
 
 

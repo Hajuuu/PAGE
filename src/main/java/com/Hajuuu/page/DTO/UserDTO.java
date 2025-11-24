@@ -24,8 +24,8 @@ public class UserDTO {
         return User.builder()
                 .loginId(this.loginId)
                 .password(this.password)
-                .followerList(new ArrayList<>())
-                .followingList(new ArrayList<>())
+                .followers(new ArrayList<>())
+                .followings(new ArrayList<>())
                 .role(Role.USER)
                 .build();
     }

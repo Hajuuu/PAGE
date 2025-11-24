@@ -24,6 +24,10 @@ public class PostService {
         return post.getId();
     }
 
+    public List<Post> getPostsByBook(int bookId) {
+        return postRepository.findAllByBookIdOrderByCreatedTimeDesc(bookId);
+    }
+
     public Optional<Post> findOne(int postId) {
         return postRepository.findById(postId);
     }

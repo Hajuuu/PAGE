@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
 
-@import "./variables/variables";
+@import "variables/variables";
 
 // Import Bootstrap source files (Required file)
-@import "../libs/bootstrap/scss/bootstrap.scss";
+@import "../libs/bootstrap/scss/bootstrap";
 
 
-@import "./variables/theme-variables";
+@import "variables/theme-variables";
 
 
 // Scrollbar style (Required file)
@@ -17,19 +17,19 @@
 
 
 // Theme Layouts style (Required file)
-@import "./layouts/sidebar";
-@import "./layouts/header";
-@import "./layouts/layouts";
+@import "layouts/sidebar";
+@import "layouts/header";
+@import "layouts/layouts";
 
 // Component style (Required file)
 
-@import "./component/reboot";
-@import "./component/card";
+@import "component/reboot";
+@import "component/card";
 
 // Utilities style (Required file)
-@import "./utilities/icon-size";
-@import "./utilities/background";
+@import "utilities/icon-size";
+@import "utilities/background";
 
 
 // Pages style (Required file)
-@import "./pages/dashboard1";
+@import "pages/dashboard1";

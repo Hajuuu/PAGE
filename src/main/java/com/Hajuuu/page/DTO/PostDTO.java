@@ -13,12 +13,17 @@ public class PostDTO {
     String content;
     LocalDateTime createdTime;
     String loginId;
+    Long startPage;
+    Long endPage;
 
     @QueryProjection
-    public PostDTO(String bookTitle, String content, LocalDateTime createdTime, String loginId) {
+    public PostDTO(String bookTitle, String content, LocalDateTime createdTime, String loginId, Long startPage,
+                   Long endPage) {
         this.bookTitle = bookTitle;
         this.content = content;
         this.createdTime = createdTime;
         this.loginId = loginId;
+        this.startPage = startPage;
+        this.endPage = endPage;
     }
 }

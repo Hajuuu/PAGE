@@ -1,45 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
-          href="../assets/css/styles.min.css?after"/>
-    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/style.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="stylesheet" th:href="@{/assets/css/styles.min.css}">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/3620a0a7fb.js"></script>
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-     data-sidebar-position="fixed" data-header-position="fixed">
+<div class="page-wrapper" data-header-position="fixed" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebar-position="fixed"
+     data-sidebartype="full" id="main-wrapper">
     <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
         <div class="d-flex align-items-center justify-content-center w-100">
             <div class="row justify-content-center w-100">
                 <div class="col-md-8 col-lg-6 col-xxl-3">
                     <div class="card mb-0">
                         <div class="card-body">
-                            <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                            <a class="text-nowrap logo-img text-center d-block py-3 w-100" href="/">
                                 <h2>PAGE</h2>
                             </a>
-                            <form action="/loginProcess" method="post" th:object="${loginForm}">
 
-                                <a th:href="'javascript:naverLogin()'">
-                                    <img src="../css/btnG_완성형.png" class="form-control" height="50px">
+                            <form method="post" th:action="@{/login}">
+
+                                <div class="mb-3">
+                                    <input class="form-control" name="loginId" placeholder="아이디" type="text">
+                                </div>
+
+                                <div class="mb-3">
+                                    <input class="form-control" name="password" placeholder="비밀번호" type="password">
+                                </div>
+
+                                <button class="btn btn-primary w-100" type="submit">로그인</button>
+
+
+                                <div class="login-links d-flex justify-content-end mt-2">
+                                    <a class="text-decoration-none me-2" href="/find-id">아이디 찾기</a>
+                                    <span class="text-muted">|</span>
+                                    <a class="text-decoration-none ms-2" href="/find-password">비밀번호 찾기</a>
+                                </div>
+
+                                <a class="naver-login-btn w-100 mt-3" href="#" th:onclick="'naverLogin()'">
+                                    <img alt="네이버 로그인" class="naver-login-img" src="../css/btnG_완성형.png">
                                 </a>
-                                <div class="mb-3">
-                                    <label th:for="id" class="form-label">ID</label>
-                                    <input type="text" class="form-control" th:field="*{loginId}">
-                                </div>
-                                <div class="mb-3">
-                                    <label th:for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" th:field="*{password}">
-                                </div>
 
-
-                                <button type="submit" class="btn btn-primary">로그인</button>
-
-                                <div class="d-flex align-items-center justify-content-center">
+                                <div class="d-flex align-items-center justify-content-center mt-3">
                                     <p class="fs-4 mb-0 fw-bold">계정이 없으신가요?</p>
                                     <a class="text-primary fw-bold ms-2" href="join">회원 가입</a>
                                 </div>
+
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -50,36 +60,13 @@
 <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
 <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
- function naverLogin() {
- var form = document.createElement("form");
- form.setAttribute("method", "get");
- form.setAttribute("action", "/login/naverLogin");
- document.body.appendChild(form);
- form.submit();
- }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    window.naverLogin = function () {
+        var form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/login/naverLogin");
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 </body>
 </html>

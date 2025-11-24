@@ -3,6 +3,7 @@ package com.Hajuuu.page.domain;
 import com.Hajuuu.page.DTO.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -49,8 +50,10 @@ public class User extends BaseTimeEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private NaverUser naverUser;
 
-    private List<Integer> followingList = new ArrayList<>();
-    private List<Integer> followerList = new ArrayList<>();
+    @ElementCollection
+    private List<Integer> followers = new ArrayList<>();
+
+    private List<Integer> followings = new ArrayList<>();
 
     public User updateName(String name) {
         this.name = name;
@@ -70,19 +73,19 @@ public class User extends BaseTimeEntity {
     }
 
     public void addFollowing(int id) {
-        this.followingList.add(id);
+        this.followings.add(id);
     }
 
     public void cancelFollowing(int id) {
-        this.followingList.remove(id);
+        this.followings.remove(id);
     }
 
     public void addFollower(int id) {
-        this.followerList.add(id);
+        this.followers.add(id);
     }
 
     public void cancelFollower(int id) {
-        this.followerList.remove(id);
+        this.followers.remove(id);
     }
 
     public String getRoleKey() {
@@ -92,4 +95,5 @@ public class User extends BaseTimeEntity {
     public void updatePassword(String password) {
         this.password = password;
     }
+
 }

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-</head>
+    <title></title></head>
 <div class="body" th:fragment="sidebar">
     <!-- Sidebar Start -->
     <aside class="left-sidebar">
         <!-- Sidebar scroll-->
         <div>
             <div class="brand-logo d-flex align-items-center justify-content-between">
-                <a href="./index.html" class="text-nowrap logo-img">
+                <a class="text-nowrap logo-img" href="./index.html">
                 </a>
                 <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                     <i class="ti ti-x fs-8"></i>
@@ -23,7 +23,7 @@
                         <span class="hide-menu">Home</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/" aria-expanded="false">
+                        <a aria-expanded="false" class="sidebar-link" href="/">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -35,7 +35,7 @@
                         <span class="hide-menu">책 읽기</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/book/new" aria-expanded="false">
+                        <a aria-expanded="false" class="sidebar-link" href="/book/new">
                 <span>
                   <i class="ti ti-article"></i>
                 </span>
@@ -43,7 +43,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/search" aria-expanded="false">
+                        <a aria-expanded="false" class="sidebar-link" href="/search">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -51,7 +51,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/books" aria-expanded="false">
+                        <a aria-expanded="false" class="sidebar-link" href="/books">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
@@ -65,9 +65,9 @@
                     </li>
 
 
-                    <th:block th:if="${#strings.equals(name, 'anonymousUser')}">
+                    <th:block sec:authorize="isAnonymous()">
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/login" aria-expanded="false">
+                            <a aria-expanded="false" class="sidebar-link" href="/login">
                                 <span>
                                     <i class="ti ti-login"></i>
                                 </span>
@@ -77,9 +77,9 @@
                     </th:block>
 
 
-                    <th:block th:if="${#strings.equals(name, 'anonymousUser')}">
+                    <th:block sec:authorize="isAnonymous()">
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/join" aria-expanded="false">
+                            <a aria-expanded="false" class="sidebar-link" href="/join">
                                 <span>
                                   <i class="ti ti-user-plus"></i>
                                 </span>
@@ -88,11 +88,10 @@
                         </li>
                     </th:block>
 
-
-                    <th:block th:if="${!#strings.equals(name, 'anonymousUser')}">
-                        <li class="sidebar-item" aria-expanded="false">
-                            <form th:action="@{/logout}" method="post">
-                                <button class="sidebar-link" type="submit" style="margin:0px 0px 2px;padding:10px;">
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li aria-expanded="false" class="sidebar-item">
+                            <form method="post" th:action="@{/logout}">
+                                <button class="sidebar-link" style="margin:0px 0px 2px;padding:10px;" type="submit">
                                     <span>
                                       <i class="ti ti-user-plus"></i>
                                     </span>

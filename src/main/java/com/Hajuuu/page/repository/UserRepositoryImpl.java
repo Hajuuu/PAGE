@@ -24,7 +24,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return queryFactory
                 .select(new QSearchUserDTO(
                         user.id,
-                        user.loginId
+                        user.loginId,
+                        user.image
                 ))
                 .from(user)
                 .where(user.loginId.contains(loginId))
@@ -38,7 +39,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         post.book.title,
                         post.content,
                         post.createdTime,
-                        post.user.loginId
+                        post.user.loginId,
+                        post.startPage,
+                        post.endPage
                 ))
                 .from(post)
                 .where(post.user.id.in(followerList))

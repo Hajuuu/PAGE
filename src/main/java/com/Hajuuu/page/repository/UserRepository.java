@@ -1,14 +1,15 @@
 package com.Hajuuu.page.repository;
 
 import com.Hajuuu.page.domain.User;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
 
-    User findByLoginId(String loginId);
+    Optional<User> findByLoginId(String loginId);
 
     Boolean existsByLoginId(String loginId);
 

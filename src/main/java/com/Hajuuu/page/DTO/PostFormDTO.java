@@ -12,13 +12,15 @@ public class PostFormDTO {
     private String content;
     private LocalDateTime date;
     private int bookId;
-    private Long page;
+    private Long startPage;
+    private Long endPage;
 
     @QueryProjection
-    public PostFormDTO(String content, LocalDateTime date, int bookId, Long page) {
+    public PostFormDTO(String content, LocalDateTime date, int bookId, Long startPage, Long endPage) {
         this.content = content;
         this.date = date;
         this.bookId = bookId;
-        this.page = page;
+        this.startPage = startPage;
+        this.endPage = endPage;
     }
 }

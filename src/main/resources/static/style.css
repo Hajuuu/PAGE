@@ -1,78 +1,195 @@
+/* 기본 리셋 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fff;
+}
+
+/* 오류 필드 표시 */
 .field-error {
   border-color: #dc3545;
   color: #dc3545;
 }
 
+/* 전체 컨테이너 */
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* 화면 높이에 맞게 */
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+/* 이미지 정렬 */
 .container > img {
-  position: absolute;
+  position: relative; /* absolute 제거 */
+  max-width: 80%;
+  height: auto;
+  margin-bottom: 1.5rem;
 }
 
-#naver-button {
-  background: url(../css/btnG_완성형.png) no-repeat center;
-  background-size: 100% 50%;
-  width: 100%;
-  height: 24px;
-  background-position: center;
-  border-radius: 0.25rem;
-
+/* 로그인 버튼 (오른쪽 끝) */
+.login-btn {
+    width: 120px;
 }
 
-#naver-button:hover {
-    color: grey;
+.naver-login-btn {
+    display: block;
+    width: 100%;
+    height: 42px;
+    border-radius: 8px;
+    background-color: #03C75A; /* 이미지 배경색과 동일하게 */
+    border: 1px solid #03C75A; /* 테두리도 배경색 맞춤 */
+    overflow: hidden;
+    padding: 0;
 }
 
-#naver-button:focus {
-    online: none;
+.naver-login-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
+
+/* 팔로우 없는 메시지 */
+.no-follow-msg {
+  display: block;           /* 블록으로 처리 */
+    width: 100%;              /* 가로 전체 */
+    text-align: center;       /* 글자 가운데 정렬 */
+    font-size: 20px;          /* 적당한 크기 */
+    color: #222;              /* 검정 계열 */
+    margin: 10px 0;       /* 위아래 여백만 줌 */
+}
+
+
+.login-links a {
+    font-size: 14px;
+    color: #555;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
+
+/* 팔로우 / 언팔로우 버튼 */
+#follow, #unfollow {
+  width: 80px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+}
+
 #follow {
-    width: 50px;
-    height: 30px;
-
-    display:flex;
-    text-align: center;
-    color: blue;
-
-    background-color: blue;
+  background-color: blue;
 }
 
 #unfollow {
-    width: 50px;
-    height: 30px;
-
-    display:flex;
-    text-align: center;
-    color: blue;
-
-    background-color: grey;
+  background-color: grey;
 }
 
+/* 카드 이미지 영역 */
 #card-img {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 1.5rem;
 }
+
+/* 이미지 박스 */
 #image {
-  width: 220px;
-  height: 280px;
-  background-image: url("/image-regular.svg") no-repeat 5px center;
+  width: 60vw;
+  max-width: 220px;
+  height: auto;
+  aspect-ratio: 220 / 280;
+  background: url("/image-regular.svg") no-repeat center;
+  background-size: cover;
+  border-radius: 10px;
 }
+
+.book-body {
+    padding: 8px 8px !important;   /* (상하 8px, 좌우 8px) */
+}
+
+/* 입력창 스타일 */
 input {
   font-size: 15px;
-  color: #222222;
-  width: 660px;
+  color: #222;
+  width: 90%;
+  max-width: 660px;
   border: none;
-  border-bottom: solid #aaaaaa 1px;
-  padding-bottom: 10px;
-  padding-left: 10px;
+  border-bottom: 1px solid #aaa;
+  padding: 10px;
   background: none;
-  z-index: 5;
   text-align: left;
+  box-sizing: border-box;
 }
 
+input::placeholder {
+  color: #aaa;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 1px solid #007bff;
+}
+
+/* 프로필 원형 이미지 */
 .radius_img {
-   border-radius: 50%
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+/* 반응형 (모바일 기준) */
+@media (max-width: 600px) {
+  input {
+    font-size: 14px;
+    width: 90%;
+  }
+
+  #image {
+    width: 70vw;
+    max-width: 200px;
+  }
+
+  #follow, #unfollow {
+    width: 70px;
+    height: 32px;
+  }
+}
+
+.book-title, .book-author {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.book-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.book-img-post {
+    width: 140px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 
-input::placeholder { color: #aaaaaa; }
-input:focus { outline: none; }
+

@@ -1,13 +1,16 @@
 package com.Hajuuu.page.controller;
 
 import com.Hajuuu.page.DTO.FollowDTO;
+import com.Hajuuu.page.DTO.PostDTO;
+import com.Hajuuu.page.DTO.ReadingStatsDTO;
 import com.Hajuuu.page.DTO.SettingDTO;
 import com.Hajuuu.page.DTO.UserDTO;
 import com.Hajuuu.page.domain.LoginForm;
 import com.Hajuuu.page.domain.UploadFile;
 import com.Hajuuu.page.domain.User;
+import com.Hajuuu.page.security.CustomUserDetails;
 import com.Hajuuu.page.service.FileStore;
-import com.Hajuuu.page.service.LoginService;
+import com.Hajuuu.page.service.ReadingStatsService;
 import com.Hajuuu.page.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -45,40 +49,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final LoginService loginService;
     private final UserService userService;
     private final FileStore fileStore;
+    private final ReadingStatsService readingStatsService;
 
     @GetMapping("/")
-    public String homeLogin(Model model) {
+    public String home(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails != null) {
+            User loginUser = userService.findByLoginId(userDetails.getUsername()); // 또는 getLoginId() 메서드
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String loginId = authentication.getName();
+            List<PostDTO> posts = userService.findFollowingUsersPost(loginUser);
 
-        log.info(loginId);
-        User loginUser = userService.findByLoginId(loginId);
-
-        if (loginUser != null) {
-            log.info(loginUser.toString());
-            model.addAttribute("user", loginUser);
-            model.addAttribute("name", loginId);
-            return "loginHome";
+            if (posts.isEmpty()) {
+                model.addAttribute("message", "아직 팔로우 중인 사용자가 없습니다. 팔로우 해보세요!");
+            } else {
+                model.addAttribute("posts", posts);
+            }
+            model.addAttribute("readingStats", readingStatsService.getStats(loginUser.getId()));
+        } else {
+            model.addAttribute("readingStats",
+                    new ReadingStatsDTO(0, 0, 0));
         }
-        model.addAttribute("name", loginId);
-        model.addAttribute("user", loginUser);
-        return "home";
+        return "home"; // home.html
     }
 
+
     @GetMapping("/join")
-    public String joinForm(@ModelAttribute("user") UserDTO userDTO, Model model) {
-        model.addAttribute("user", userDTO);
+    public String joinForm(@ModelAttribute("userDTO") UserDTO userDTO, Model model) {
+        model.addAttribute("userDTO", userDTO);
 
         return "/member/joinForm";
     }
 
     @PostMapping("/join")
-    public String saveUser(@Validated @ModelAttribute("user") UserDTO userDTO, BindingResult bindingResult) {
+    public String saveUser(@Validated @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -120,19 +124,14 @@ public class HomeController {
     }
 
     @GetMapping("/setting")
-    public String setting(Model model) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String loginId = authentication.getName();
-
-        User findUser = userService.findByLoginId(loginId);
+    public String setting(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        User findUser = userService.findByLoginId(userDetails.getUsername());
         SettingDTO settingDTO = new SettingDTO();
         settingDTO.setLoginId(findUser.getLoginId());
         settingDTO.setName(findUser.getName());
         settingDTO.setEmail(findUser.getEmail());
         settingDTO.setPassword(findUser.getPassword());
         settingDTO.setImage(findUser.getImage());
-        settingDTO.setCheck(false);
         model.addAttribute("user", settingDTO);
         return "/my/setting";
     }
@@ -168,14 +167,10 @@ public class HomeController {
 
     @PostMapping("/setting/filedelete")
     @Transactional
-    public String fileDelete(@ModelAttribute SettingDTO settingDTO)
+    public String fileDelete(@AuthenticationPrincipal CustomUserDetails userDetails,
+                             @ModelAttribute SettingDTO settingDTO)
             throws IOException {
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String loginId = authentication.getName();
-
-        User findUser = userService.findByLoginId(loginId);
+        User findUser = userService.findByLoginId(userDetails.getUsername());
 
         String fileUrl = fileStore.getFullPath(findUser.getImage());
 
@@ -212,8 +207,6 @@ public class HomeController {
         settingDTO.setEmail(findUser.getEmail());
         settingDTO.setPassword(findUser.getPassword());
         settingDTO.setImage(findUser.getImage());
-        boolean matches = userService.checkPassword(settingDTO);
-        settingDTO.setCheck(matches);
         model.addAttribute("user", settingDTO);
         return "/my/setting";
     }
@@ -240,7 +233,7 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
+    public String login(@ModelAttribute("loginForm") LoginForm form) {
         return "/member/loginForm";
     }
 

@@ -9,8 +9,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Builder
 public class SearchBookDTO {
 
@@ -45,4 +47,5 @@ public class SearchBookDTO {
         this.isbn = isbn;
         this.bookState = bookState;
     }
+
 }

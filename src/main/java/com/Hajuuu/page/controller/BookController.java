@@ -1,29 +1,24 @@
 package com.Hajuuu.page.controller;
 
 import com.Hajuuu.page.DTO.BookFormDTO;
-import com.Hajuuu.page.api.AladinBookDTO;
-import com.Hajuuu.page.api.AladinBookInfo;
-import com.Hajuuu.page.api.AladinSearchService;
-import com.Hajuuu.page.api.NaverBookInfo;
-import com.Hajuuu.page.api.NaverSearchService;
+import com.Hajuuu.page.api.*;
 import com.Hajuuu.page.domain.User;
+import com.Hajuuu.page.security.CustomUserDetails;
 import com.Hajuuu.page.service.BookService;
 import com.Hajuuu.page.service.UserService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -38,14 +33,21 @@ public class BookController {
     private static String image = "";
 
     @GetMapping("/book/new")
-    public String bookForm(@ModelAttribute("books") BookFormDTO bookFormDTO, Model model) {
+    public String bookForm(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute("books") BookFormDTO bookFormDTO, Model model) {
+        if (userDetails == null) {
+            model.addAttribute("user", null);
+            return "home";
+        }
+        String loginId = userDetails.getUsername();
+        User loginUser = userService.findByLoginId(loginId);
+        model.addAttribute("user", loginUser);
         model.addAttribute("books", bookFormDTO);
 
         return "/search/createBookForm";
     }
 
     @PostMapping("/book/new")
-    public String addBook(@Validated @ModelAttribute("books") BookFormDTO bookFormDTO,
+    public String addBook(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute("books") BookFormDTO bookFormDTO,
                           BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
@@ -54,16 +56,16 @@ public class BookController {
             return "search/createBookForm";
         }
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String loginId = authentication.getName();
-
+        if (userDetails == null) {
+            model.addAttribute("user", null);
+            return "home";
+        }
+        String loginId = userDetails.getUsername();
         User loginUser = userService.findByLoginId(loginId);
-
         bookFormDTO.setImage(image);
         bookService.saveBook(loginUser, bookFormDTO);
 
-        redirectAttributes.addFlashAttribute("loginUser", loginUser);
+        redirectAttributes.addFlashAttribute("user", loginUser);
         return "redirect:/books";
     }
 

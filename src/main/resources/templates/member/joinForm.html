@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" th:href="@{../assets/css/styles.min.css}"
-          href="../assets/css/styles.min.css"/>
-    <script src="https://kit.fontawesome.com/3620a0a7fb.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/style.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../assets/css/styles.min.css" rel="stylesheet"
+          th:href="@{../assets/css/styles.min.css}"/>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/3620a0a7fb.js"></script>
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
 <!--  Body Wrapper -->
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-     data-sidebar-position="fixed" data-header-position="fixed">
+<div class="page-wrapper" data-header-position="fixed" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebar-position="fixed"
+     data-sidebartype="full" id="main-wrapper">
     <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
         <div class="d-flex align-items-center justify-content-center w-100">
             <div class="row justify-content-center w-100">
                 <div class="col-md-8 col-lg-6 col-xxl-3">
                     <div class="card mb-0">
                         <div class="card-body">
-                            <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                            <a class="text-nowrap logo-img text-center d-block py-3 w-100" href="/">
                                 <h2>PAGE</h2>
                             </a>
-                            <form th:action="@{/join}" th:object="${user}" method="post">
+                            <form method="post" th:action="@{/join}" th:object="${userDTO}">
+                                <!-- 아이디 입력 -->
                                 <div class="mb-3">
-                                    <label th:for="loginId" class="form-label">ID</label>
-                                    <input type="text" class="form-control" th:errorclass="field-error"
-                                           th:field="*{loginId}">
+                                    <input class="form-control" placeholder="아이디" th:errorclass="field-error"
+                                           th:field="*{loginId}" type="text">
                                     <div class="field-error" th:errors="*{loginId}">ID를 입력해주세요</div>
                                 </div>
-                                <div class="mb-4">
-                                    <label th:for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" th:errorclass="field-error"
-                                           th:field="*{password}">
+
+                                <!-- 비밀번호 입력 -->
+                                <div class="mb-3">
+                                    <input class="form-control" placeholder="비밀번호" th:errorclass="field-error"
+                                           th:field="*{password}" type="password">
                                     <div class="field-error" th:errors="*{password}">비밀번호를 입력해주세요</div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">회원 가입</button>
 
+                                <!-- 회원가입 버튼 -->
+                                <div class="mb-3">
+                                    <button class="btn btn-primary w-100" type="submit">회원 가입</button>
+                                </div>
                             </form>
-                            <div class="d-flex align-items-center justify-content-center">
+                            <div class="d-flex align-items-center justify-content-center mt-2">
                                 <p class="fs-4 mb-0 fw-bold">이미 계정이 있으신가요?</p>
                                 <a class="text-primary fw-bold ms-2" href="/login">로그인</a>
                             </div>
